@@ -66,4 +66,8 @@ elif [[ $1 == "set" ]]; then
   elif [[ $2 == "remove" ]]; then
     rm -rf "$EVM_HOME/sets/$EVM_EMACS/$3"
   fi
+else
+  echo "Could not find task '$1'."
+  
+  exit 1
 fi
