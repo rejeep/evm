@@ -1,7 +1,11 @@
 #!/bin/bash
 
+if [ -z "$EVM_HOME" ] ; then
+  EVM_HOME=$HOME/.evm
+fi
+
 if [[ $1 == "update" ]]; then
-  cd $HOME/.evm && git pull
+  cd $EVM_HOME && git pull
 elif [[ $1 == "list" ]]; then
   echo "list"
 elif [[ $1 == "install" ]]; then
