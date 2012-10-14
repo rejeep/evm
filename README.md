@@ -81,7 +81,7 @@ Each installed version can have a set.
 
 To list all installed sets for the current version, run
 
-    $ evm list
+    $ evm set list
     
 The output will look something like this:
 
