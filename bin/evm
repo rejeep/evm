@@ -25,6 +25,12 @@ elif [[ $1 == "uninstall" ]]; then
 elif [[ $1 == "use" ]]; then
   echo $2 > $EVM_HOME/tmp/emacs
 elif [[ $1 == "set" ]]; then
+  if [[ -z $EVM_EMACS ]]; then
+    echo "Select Emacs version first"
+    
+    exit 1
+  fi
+  
   if [[ $2 == "list" ]]; then
     echo "Sets for $EVM_EMACS"
     for i in $EVM_HOME/sets/$EVM_EMACS/*; do
