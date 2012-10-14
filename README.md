@@ -18,6 +18,16 @@ contributing and give feedback._
   running on 23, which I have had no time migrating. How do I install
   both at the same time and easily switch between them?
 
+## Platform Support
+
+### OSX
+Supported!
+
+### GNU/Linux
+Not supported. Need help from someone running GNU/Linux.
+
+### Windows
+Not supported. Need help from someone running Windows.
 
 ## Installation
 
