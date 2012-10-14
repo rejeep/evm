@@ -13,9 +13,15 @@ elif [[ $1 == "list" ]]; then
   for i in $EVM_HOME/scripts/*; do
     NAME=$(basename $i)
     if [[ $NAME == $EVM_EMACS ]]; then
-      echo "*" $NAME
+      echo -n "*" $NAME
     else
-      echo $NAME
+      echo -n $NAME
+    fi
+    
+    if [[ -d "$EVM_HOME/installations/$NAME" ]]; then
+      echo " [I]"
+    else
+      echo
     fi
   done
 elif [[ $1 == "install" ]]; then
