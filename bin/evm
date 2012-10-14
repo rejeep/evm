@@ -52,6 +52,6 @@ elif [[ $1 == "set" ]]; then
   elif [[ $2 == "use" ]]; then
     echo $3 > $EVM_HOME/tmp/set
   elif [[ $2 == "remove" ]]; then
-    echo "remove"
+    rm -rf "$EVM_HOME/sets/$EVM_EMACS/$3"
   fi
 fi
