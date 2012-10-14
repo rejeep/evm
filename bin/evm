@@ -4,8 +4,8 @@ if [ -z "$EVM_HOME" ] ; then
   EVM_HOME=$HOME/.evm
 fi
 
-EVM_EMACS=$(cat $EVM_HOME/tmp/emacs)
-EVM_SET=$(cat $EVM_HOME/tmp/set)
+EVM_EMACS=$(cat $EVM_HOME/tmp/emacs 2> /dev/null)
+EVM_SET=$(cat $EVM_HOME/tmp/set 2> /dev/null)
 
 if [[ $1 == "update" ]]; then
   cd $EVM_HOME && git pull
