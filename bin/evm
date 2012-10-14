@@ -27,6 +27,12 @@ elif [[ $1 == "list" ]]; then
 elif [[ $1 == "install" ]]; then
   echo "install"
 elif [[ $1 == "uninstall" ]]; then
+  if [[ -z $2 ]]; then
+    echo "Must specify what Emacs version to uninstall"
+    
+    exit 1
+  fi
+  
   rm -rf "$EVM_HOME/installations/$2"
 elif [[ $1 == "use" ]]; then
   echo $2 > $EVM_HOME/tmp/emacs
