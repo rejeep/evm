@@ -32,7 +32,12 @@ elif [[ $1 == "set" ]]; then
       fi
     done
   elif [[ $2 == "create" ]]; then
-    echo "create"
+    if [[ -n $3 ]]; then
+      SET=$EVM_HOME/sets/$EVM_EMACS/$3
+      if [[ ! -d $SET ]]; then
+        mkdir $SET
+      fi
+    fi
   elif [[ $2 == "use" ]]; then
     echo "use"
   elif [[ $2 == "remove" ]]; then
