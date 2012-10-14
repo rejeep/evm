@@ -26,7 +26,9 @@ elif [[ $1 == "use" ]]; then
   echo $2 > $EVM_HOME/tmp/emacs
 elif [[ $1 == "set" ]]; then
   if [[ $2 == "list" ]]; then
+    echo "Sets for $EVM_EMACS"
     for i in $EVM_HOME/sets/$EVM_EMACS/*; do
+      echo -n "  "
       NAME=$(basename $i)
       if [[ $NAME == $EVM_SET ]]; then
         echo "*" $NAME
