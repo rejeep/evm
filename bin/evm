@@ -26,6 +26,7 @@ elif [[ $1 == "list" ]]; then
   done
 elif [[ $1 == "install" ]]; then
   bash "$EVM_HOME/scripts/$2"
+  mkdir $EVM_HOME/sets/$2
 elif [[ $1 == "uninstall" ]]; then
   if [[ -z $2 ]]; then
     echo "Must specify what Emacs version to uninstall"
@@ -34,6 +35,7 @@ elif [[ $1 == "uninstall" ]]; then
   fi
   
   rm -rf "$EVM_HOME/installations/$2"
+  rm -rf "$EVM_HOME/sets/$2"
 elif [[ $1 == "use" ]]; then
   echo $2 > $EVM_HOME/tmp/emacs
 elif [[ $1 == "set" ]]; then
