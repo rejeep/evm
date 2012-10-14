@@ -47,15 +47,19 @@ elif [[ $1 == "set" ]]; then
   
   if [[ $2 == "list" ]]; then
     echo "Sets for $EVM_EMACS"
-    for i in $EVM_HOME/sets/$EVM_EMACS/*; do
-      echo -n "  "
-      NAME=$(basename $i)
-      if [[ $NAME == $EVM_SET ]]; then
-        echo "*" $NAME
-      else
-        echo $NAME
-      fi
-    done
+
+    SET_PATH="$EVM_HOME/sets/$EVM_EMACS"
+    if [[ $(ls $SET_PATH | wc -l) -ne 0 ]]; then
+      for i in $SET_PATH/*; do
+        echo -n "  "
+        NAME=$(basename $i)
+        if [[ $NAME == $EVM_SET ]]; then
+          echo "*" $NAME
+        else
+          echo $NAME
+        fi
+      done
+    fi
   elif [[ $2 == "create" ]]; then
     if [[ -n $3 ]]; then
       SET=$EVM_HOME/sets/$EVM_EMACS/$3
