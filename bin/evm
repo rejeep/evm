@@ -22,9 +22,15 @@ elif [[ $1 == "uninstall" ]]; then
 elif [[ $1 == "use" ]]; then
   echo "use"
 elif [[ $1 == "set" ]]; then
-  echo "set"
   if [[ $2 == "list" ]]; then
-    echo "list"
+    for i in $EVM_HOME/sets/$EVM_EMACS/*; do
+      NAME=$(basename $i)
+      if [[ $NAME == $EVM_SET ]]; then
+        echo "*" $NAME
+      else
+        echo $NAME
+      fi
+    done
   elif [[ $2 == "create" ]]; then
     echo "create"
   elif [[ $2 == "use" ]]; then
