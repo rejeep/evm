@@ -7,7 +7,14 @@ fi
 if [[ $1 == "update" ]]; then
   cd $EVM_HOME && git pull
 elif [[ $1 == "list" ]]; then
-  echo "list"
+  for i in $EVM_HOME/scripts/*; do
+    NAME=$(basename $i)
+    if [[ $NAME == $EVM_EMACS ]]; then
+      echo "*" $NAME
+    else
+      echo $NAME
+    fi
+  done
 elif [[ $1 == "install" ]]; then
   echo "install"
 elif [[ $1 == "uninstall" ]]; then
