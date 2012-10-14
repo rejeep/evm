@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [[ $1 == "update" ]]; then
+  echo "update"
+elif [[ $1 == "list" ]]; then
+  echo "list"
+elif [[ $1 == "install" ]]; then
+  echo "install"
+elif [[ $1 == "uninstall" ]]; then
+  echo "uninstall"
+elif [[ $1 == "use" ]]; then
+  echo "use"
+elif [[ $1 == "set" ]]; then
+  echo "set"
+  if [[ $2 == "list" ]]; then
+    echo "list"
+  elif [[ $2 == "create" ]]; then
+    echo "create"
+  elif [[ $2 == "use" ]]; then
+    echo "use"
+  elif [[ $2 == "remove" ]]; then
+    echo "remove"
+  fi
+fi
