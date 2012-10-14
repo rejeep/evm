@@ -4,6 +4,9 @@ if [ -z "$EVM_HOME" ] ; then
   EVM_HOME=$HOME/.evm
 fi
 
+EVM_EMACS=$(cat $EVM_HOME/tmp/emacs)
+EVM_SET=$(cat $EVM_HOME/tmp/set)
+
 if [[ $1 == "update" ]]; then
   cd $EVM_HOME && git pull
 elif [[ $1 == "list" ]]; then
@@ -20,7 +23,7 @@ elif [[ $1 == "install" ]]; then
 elif [[ $1 == "uninstall" ]]; then
   echo "uninstall"
 elif [[ $1 == "use" ]]; then
-  echo "use"
+  echo $2 > $EVM_HOME/tmp/emacs
 elif [[ $1 == "set" ]]; then
   if [[ $2 == "list" ]]; then
     for i in $EVM_HOME/sets/$EVM_EMACS/*; do
@@ -39,7 +42,7 @@ elif [[ $1 == "set" ]]; then
       fi
     fi
   elif [[ $2 == "use" ]]; then
-    echo "use"
+    echo $3 > $EVM_HOME/tmp/set
   elif [[ $2 == "remove" ]]; then
     echo "remove"
   fi
