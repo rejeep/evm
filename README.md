@@ -62,8 +62,8 @@ To list all available Emacs versions you can install, run:
 The output will look something like this:
 
     emacs-23.3
-    * emacs-24.1
-    emacs-24.2
+    * emacs-24.1 [I]
+    emacs-24.2 [I]
 
 To install a version, run
 
