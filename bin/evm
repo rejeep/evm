@@ -3,6 +3,7 @@
 if [ -z "$EVM_HOME" ] ; then
   EVM_HOME=$HOME/.evm
 fi
+export EVM_HOME
 
 EVM_EMACS=$(cat $EVM_HOME/tmp/emacs 2> /dev/null)
 EVM_SET=$(cat $EVM_HOME/tmp/set 2> /dev/null)
@@ -26,7 +27,7 @@ elif [[ $1 == "list" ]]; then
   done
 elif [[ $1 == "install" ]]; then
   bash "$EVM_HOME/scripts/$2"
-  mkdir $EVM_HOME/sets/$2
+  mkdir -p $EVM_HOME/sets/$2
 elif [[ $1 == "uninstall" ]]; then
   if [[ -z $2 ]]; then
     echo "Must specify what Emacs version to uninstall"
