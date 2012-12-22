@@ -24,7 +24,7 @@ contributing and give feedback._
 Supported!
 
 ### GNU/Linux
-Not supported. Need help from someone running GNU/Linux.
+Supported!
 
 ### Windows
 Not supported. Need help from someone running Windows.
