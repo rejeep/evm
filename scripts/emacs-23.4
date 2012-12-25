@@ -8,7 +8,13 @@ mkdir -p $PREFIX
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   CONF_OPTS=("${CONF_OPTS[@]}" --without-dbus --without-x --with-ns)
+elif [[ "$OSTYPE" == "linux"* ]]; then
+  CONF_OPTS=("${CONF_OPTS[@]}" \
+      "--with-crt-dir=$(dirname $(gcc -print-file-name=crt1.o))")  # [#1]_
 fi
+# .. [#1] Avoid the following error:
+#      configure: error: crt*.o not found.
+#        Use --with-crt-dir to specify the location.
 
 TAR_FILE="$EVM_HOME/tars/emacs-23.4.tar.bz2"
 if [[ ! -f $TAR_FILE ]]; then
