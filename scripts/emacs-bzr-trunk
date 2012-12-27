@@ -1,7 +1,7 @@
 #!/bin/bash
 
-URL="http://ftpmirror.gnu.org/emacs/emacs-24.2.tar.bz2"
-PREFIX="$EVM_HOME/installations/emacs-24.2"
+URL="bzr://bzr.savannah.gnu.org/emacs/trunk"
+PREFIX="$EVM_HOME/installations/emacs-bzr-turnk"
 CONF_OPTS=()
 
 mkdir -p $PREFIX
@@ -10,19 +10,17 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   CONF_OPTS=("${CONF_OPTS[@]}" --without-dbus --without-x --with-ns)
 fi
 
-TAR_FILE="$EVM_HOME/tars/emacs-24.2.tar.bz2"
-if [[ ! -f $TAR_FILE ]]; then
-  wget $URL -O $TAR_FILE
-fi
-
 CACHE_DIR="$EVM_HOME/cache"
-EMACS_DIR="$CACHE_DIR/emacs-24.2"
+EMACS_DIR="$CACHE_DIR/emacs-bzr-turnk"
 
 if [[ ! -d $EMACS_DIR ]]; then
-  tar -xvjf $TAR_FILE -C $CACHE_DIR
+  bzr branch $URL $EMACS_DIR
+  cd $EMACS_DIR
+  ./autogen.sh
+else
+  cd $EMACS_DIR
+  bzr pull
 fi
-
-cd $EMACS_DIR
 
 ./configure --prefix=$PREFIX "${CONF_OPTS[@]}"
 make bootstrap
