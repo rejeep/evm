@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -e
+
+URL="bzr://bzr.savannah.gnu.org/emacs/trunk"
+PREFIX="$EVM_HOME/installations/emacs-bzr-trunk"
+CONF_OPTS=()
+
+mkdir -p $PREFIX
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  CONF_OPTS=("${CONF_OPTS[@]}" --without-dbus --without-x --with-ns)
+fi
+
+CACHE_DIR="$EVM_HOME/cache"
+EMACS_DIR="$CACHE_DIR/emacs-bzr-trunk"
+
+if [[ ! -d $EMACS_DIR ]]; then
+  bzr branch $URL $EMACS_DIR
+  cd $EMACS_DIR
+  ./autogen.sh
+else
+  cd $EMACS_DIR
+  bzr pull
+fi
+
+./configure --prefix=$PREFIX "${CONF_OPTS[@]}"
+make bootstrap
+make install
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  cp -r "nextstep/Emacs.app" $PREFIX
+fi
