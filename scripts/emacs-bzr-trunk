@@ -3,7 +3,7 @@
 set -e
 
 URL="bzr://bzr.savannah.gnu.org/emacs/trunk"
-PREFIX="$EVM_HOME/installations/emacs-bzr-turnk"
+PREFIX="$EVM_HOME/installations/emacs-bzr-trunk"
 CONF_OPTS=()
 
 mkdir -p $PREFIX
@@ -13,7 +13,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 CACHE_DIR="$EVM_HOME/cache"
-EMACS_DIR="$CACHE_DIR/emacs-bzr-turnk"
+EMACS_DIR="$CACHE_DIR/emacs-bzr-trunk"
 
 if [[ ! -d $EMACS_DIR ]]; then
   bzr branch $URL $EMACS_DIR
