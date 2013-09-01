@@ -31,13 +31,11 @@ Not supported. Need help from someone running Windows.
 
 ## Installation
 
+Install [Cask](https://github.com/cask/cask).
+
 To automatically install EVM, run this command:
 
     curl -fsSkL https://raw.github.com/rejeep/evm/master/go | sh
-
-You can also clone the repository.
-
-    $ git clone https://github.com/rejeep/evm.git ~/.evm
 
 Don't forget to add EVM's bin to your `PATH`.
 
@@ -84,35 +82,3 @@ Example
 To uninstall a version, run
 
     $ evm uninstall emacs-24.2
-
-## Sets
-
-Each installed version can have a set.
-
-To list all installed sets for the current version, run
-
-    $ evm set list
-    
-The output will look something like this:
-
-    sets for emacs-24.2
-
-      * ecukes
-      wrap-region
-      carton
-
-To create a new set, run
-
-    $ evm set create name
-    
-Example
-
-    $ evm set create ecukes
-
-To use a set, run
-
-    $ evm set use ecukes
-
-To remove a set, run
-
-    $ evm set remove ecukes

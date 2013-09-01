@@ -1,80 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
-if [ -z "$EVM_HOME" ] ; then
-  EVM_HOME=$HOME/.evm
-fi
-export EVM_HOME
-
-EVM_EMACS=$(cat $EVM_HOME/tmp/emacs 2> /dev/null)
-EVM_SET=$(cat $EVM_HOME/tmp/set 2> /dev/null)
-
-if [[ $1 == "update" ]]; then
-  cd $EVM_HOME && git pull
-elif [[ $1 == "list" ]]; then
-  for i in $EVM_HOME/scripts/*; do
-    NAME=$(basename $i)
-    if [[ $NAME == $EVM_EMACS ]]; then
-      echo -n "*" $NAME
-    else
-      echo -n $NAME
-    fi
-    
-    if [[ -d "$EVM_HOME/installations/$NAME" ]]; then
-      echo " [I]"
-    else
-      echo
-    fi
-  done
-elif [[ $1 == "install" ]]; then
-  bash "$EVM_HOME/scripts/$2"
-  mkdir -p $EVM_HOME/sets/$2
-elif [[ $1 == "uninstall" ]]; then
-  if [[ -z $2 ]]; then
-    echo "Must specify what Emacs version to uninstall"
-    
-    exit 1
-  fi
-  
-  rm -rf "$EVM_HOME/installations/$2"
-  rm -rf "$EVM_HOME/sets/$2"
-elif [[ $1 == "use" ]]; then
-  echo $2 > $EVM_HOME/tmp/emacs
-elif [[ $1 == "set" ]]; then
-  if [[ -z $EVM_EMACS ]]; then
-    echo "Select Emacs version first"
-    
-    exit 1
-  fi
-  
-  if [[ $2 == "list" ]]; then
-    echo "Sets for $EVM_EMACS"
-
-    SET_PATH="$EVM_HOME/sets/$EVM_EMACS"
-    if [[ $(ls $SET_PATH | wc -l) -ne 0 ]]; then
-      for i in $SET_PATH/*; do
-        echo -n "  "
-        NAME=$(basename $i)
-        if [[ $NAME == $EVM_SET ]]; then
-          echo "*" $NAME
-        else
-          echo $NAME
-        fi
-      done
-    fi
-  elif [[ $2 == "create" ]]; then
-    if [[ -n $3 ]]; then
-      SET=$EVM_HOME/sets/$EVM_EMACS/$3
-      if [[ ! -d $SET ]]; then
-        mkdir $SET
-      fi
-    fi
-  elif [[ $2 == "use" ]]; then
-    echo $3 > $EVM_HOME/tmp/set
-  elif [[ $2 == "remove" ]]; then
-    rm -rf "$EVM_HOME/sets/$EVM_EMACS/$3"
-  fi
+if [[ -n "$INSIDE_EMACS" ]]; then
+  EVM_EMACS="emacs"
 else
-  echo "Could not find task '$1'."
-  
-  exit 1
+  EVM_EMACS="${EMACS:-emacs}"
 fi
+
+export EVM_HOME=$(dirname $(dirname $0))
+
+cask exec "${EVM_EMACS}" -Q --script "${EVM_HOME}/evm.el" -- "$@"
