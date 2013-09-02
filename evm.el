@@ -127,8 +127,6 @@
 
  (option "-h, --help" "Show usage information" evm/help))
 
-(kill-emacs)
-
 (provide 'evm)
 
 ;;; evm.el ends here
