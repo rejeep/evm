@@ -37,7 +37,7 @@
 (require 'commander)
 
 (defvar evm-path
-  (f-dirname (f-this-file)))
+  (f-expand ".evm" (getenv "HOME")))
 
 (defvar evm-emacs-path
   (f-expand ".evm" user-emacs-directory))
