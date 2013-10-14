@@ -8,4 +8,13 @@ fi
 
 export EVM_HOME=$(dirname $(dirname $0))
 
-cask exec "${EVM_EMACS}" -Q --script "${EVM_HOME}/evm.el" -- "$@"
+if [[ -z $CASK ]]; then
+  CASK=$(which cask)
+fi
+
+if [[ -x $CASK ]]; then
+  cd $EVM_HOME && $CASK exec "${EVM_EMACS}" -Q --script "${EVM_HOME}/evm.el" -- "$@"
+else
+  echo "Cask not installed. See http://cask.github.io/installation"
+  exit 1
+fi
