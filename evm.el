@@ -29,6 +29,7 @@
 
 ;;; Code:
 
+;; Avoid "Loading vc-git..." messages
 (remove-hook 'find-file-hooks 'vc-find-file-hook)
 
 (require 'f)
