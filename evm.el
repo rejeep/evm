@@ -53,6 +53,15 @@
 (defvar evm-installations-path
   (f-expand "installations" evm-path))
 
+(defvar evm-cache-path
+  (f-expand "cache" evm-path))
+
+(defvar evm-tars-path
+  (f-expand "tars" evm-path))
+
+(defvar evm-force nil
+  "Force installation if true.")
+
 (defvar evm-emacs
   (when (f-file? evm-emacs-path)
     (s-trim (f-read-text evm-emacs-path 'utf-8))))
@@ -86,13 +95,27 @@
 (defun evm--osx? ()
   (f-dir? (f-expand "Emacs.app" (evm--installation-path))))
 
+(defun evm--clean (version)
+  "Clean out installation, cache and tar of VERSION."
+  (let ((installation (f-expand version evm-installations-path))
+        (cache (f-expand version evm-cache-path))
+        (tar (f-expand (concat version ".tar.bz2") evm-tars-path)))
+    (dolist (file (list installation cache tar))
+      (when (f-exists? file)
+        (f-delete file :force)))))
+
+(defun evm/force ()
+  (setq evm-force t))
+
 (defun evm/help ()
   (commander-print-usage-and-exit))
 
 (defun evm/install (version)
   (evm--validate-version version)
   (when (evm--installed? version)
-    (error "Already installed %s" version))
+    (if evm-force
+        (evm--clean version)
+      (error "Already installed %s" version)))
   (let* ((script (f-expand version evm-scripts-path))
          (buffer (get-buffer-create "*evm*"))
          (process (start-process version buffer script)))
@@ -105,7 +128,9 @@
 
 (defun evm/uninstall (version)
   (evm--validate-version version)
-  (f-delete (f-expand version evm-installations-path) :force))
+  (unless (or evm-force (evm--installed? version))
+    (evm--fail "Version %s not installed" version))
+  (evm--clean version)
   (evm--ok "Successfully uninstalled %s" version))
 
 (defun evm/use (version)
@@ -140,7 +165,8 @@
  (command "list" "List all versions" evm/list)
  (command "bin [name]" "Return path to current or specified Emacs installation binary" evm/bin)
 
- (option "-h, --help" "Show usage information" evm/help))
+ (option "-h, --help" "Show usage information" evm/help)
+ (option "--force" "Force install/uninstall version." evm/force))
 
 (provide 'evm)
 
