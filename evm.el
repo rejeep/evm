@@ -113,11 +113,12 @@
        (princ " [I]"))
      (princ "\n"))))
 
-(defun evm/bin ()
-  (princ
-   (if (evm--osx?)
-       (f-join (evm--installation-path) "Emacs.app" "Contents" "MacOS" "Emacs")
-     (f-join (evm--installation-path) "bin" "emacs"))))
+(defun evm/bin (&optional name)
+  (let ((evm-emacs (or name evm-emacs)))
+    (princ
+     (if (evm--osx?)
+         (f-join (evm--installation-path) "Emacs.app" "Contents" "MacOS" "Emacs")
+       (f-join (evm--installation-path) "bin" "emacs")))))
 
 (commander
  (name "evm")
@@ -127,7 +128,7 @@
  (command "uninstall <version>" "Uninstall version" evm/uninstall)
  (command "use <version>" "Use version" evm/use)
  (command "list" "List all versions" evm/list)
- (command "bin" "Return path to current Emacs installation binary" evm/bin)
+ (command "bin [name]" "Return path to current or specified Emacs installation binary" evm/bin)
 
  (option "-h, --help" "Show usage information" evm/help))
 
