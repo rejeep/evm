@@ -32,7 +32,8 @@
 ;; Avoid "Loading vc-git..." messages
 (remove-hook 'find-file-hooks 'vc-find-file-hook)
 
-;; Avoid "ls does not support --dired; see `dired-use-ls-dired' for more details." messages
+;; Avoid "ls does not support --dired; see `dired-use-ls-dired' for
+;; more details." messages
 (setq dired-use-ls-dired nil)
 
 (require 'f)
