@@ -100,11 +100,13 @@
      process
      (lambda (process string)
        (princ string)))
-    (while (accept-process-output process))))
+    (while (accept-process-output process))
+    (evm--ok "Successfully installed %s" version)))
 
 (defun evm/uninstall (version)
   (evm--validate-version version)
   (f-delete (f-expand version evm-installations-path) :force))
+  (evm--ok "Successfully uninstalled %s" version))
 
 (defun evm/use (version)
   (evm--validate-version version)
