@@ -66,6 +66,13 @@
       (equal (f-filename path) file))
     :recursive)))
 
+(defun evm--ok (format-string &rest objects)
+  (princ (apply 'format (concat format-string "\n") objects)))
+
+(defun evm--fail (format-string &rest objects)
+  (apply 'message format-string objects)
+  (kill-emacs 1))
+
 (defun evm--installation-path ()
   (f-expand evm-emacs evm-installations-path))
 
