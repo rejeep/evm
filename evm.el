@@ -95,13 +95,23 @@
 (defun evm--osx? ()
   (f-dir? (f-expand "Emacs.app" (evm--installation-path))))
 
+(defun evm--find-tar (version)
+  "Find tar file in `evm-tars-path' for VERSION."
+  (car
+   (f-files
+    evm-tars-path
+    (lambda (file)
+      (--any?
+       (s-ends-with? (concat version "." it) file)
+       '("tar.bz2" "tar.gz" "tar.xz"))))))
+
 (defun evm--clean (version)
   "Clean out installation, cache and tar of VERSION."
   (let ((installation (f-expand version evm-installations-path))
         (cache (f-expand version evm-cache-path))
-        (tar (f-expand (concat version ".tar.bz2") evm-tars-path)))
+        (tar (evm--find-tar version)))
     (dolist (file (list installation cache tar))
-      (when (f-exists? file)
+      (when (and file (f-exists? file))
         (f-delete file :force)))))
 
 (defun evm/force ()
