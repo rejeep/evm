@@ -138,7 +138,9 @@
      (lambda (process string)
        (princ string)))
     (while (accept-process-output process))
-    (evm--ok "Successfully installed %s" version)))
+    (if (= (process-exit-status process) 0)
+        (evm--ok "Successfully installed %s" version)
+      (evm--fail "Something went wrong installing %s" version))))
 
 (defun evm/uninstall (version)
   (evm--validate-version version)
