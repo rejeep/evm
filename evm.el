@@ -117,6 +117,10 @@
 (defun evm/force ()
   (setq evm-force t))
 
+(defun evm/debug ()
+  (setq debug-on-entry t)
+  (setq debug-on-error t))
+
 (defun evm/help ()
   (commander-print-usage-and-exit))
 
@@ -176,7 +180,8 @@
  (command "bin [name]" "Return path to current or specified Emacs installation binary" evm/bin)
 
  (option "-h, --help" "Show usage information" evm/help)
- (option "--force" "Force install/uninstall version." evm/force))
+ (option "--force" "Force install/uninstall version." evm/force)
+ (option "--debug" "Enable debug information." evm/debug))
 
 (provide 'evm)
 
