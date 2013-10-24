@@ -40,16 +40,6 @@ To automatically install EVM, run this command:
 Don't forget to add EVM's bin to your `PATH`.
 
     $ export PATH="~/.evm/bin:$PATH"
-    
-## Update
-
-To update EVM, run
-
-    $ evm update
-    
-Or if you cloned the repository when installing, run
-
-    $ cd ~/.evm && git pull
 
 ## Usage
 
