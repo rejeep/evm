@@ -10,9 +10,9 @@ module Evm
   end
 end
 
-require 'os'
-require 'cli'
-require 'recipe'
-require 'package'
-require 'command'
-require 'exception'
+require 'evm/os'
+require 'evm/cli'
+require 'evm/recipe'
+require 'evm/package'
+require 'evm/command'
+require 'evm/exception'
