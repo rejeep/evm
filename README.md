@@ -136,7 +136,7 @@ $ evm uninstall emacs-24.2
 For more information, run:
 
 ```sh
-$ evm help
+$ evm --help
 ```
 
 ## Contribution
