@@ -8,37 +8,25 @@ describe Evm::Cli do
   end
 
   it 'should initialize class without argument or option' do
-    @foo.stub(:new) do |command, options|
-      command.should == nil
-      options.should == {}
-    end
+    @foo.should_receive(:new).with(nil, {})
 
     Evm::Cli.parse(['foo'])
   end
 
   it 'should initialize class with argument' do
-    @foo.stub(:new) do |command, options|
-      command.should == 'bar'
-      options.should == {}
-    end
+    @foo.should_receive(:new).with('bar', {})
 
     Evm::Cli.parse(['foo', 'bar'])
   end
 
   it 'should initialize class with option' do
-    @foo.stub(:new) do |command, options|
-      command.should == nil
-      options.should == { :force => true }
-    end
+    @foo.should_receive(:new).with(nil, :force => true)
 
     Evm::Cli.parse(['foo', '--force'])
   end
 
   it 'should create command class with argument and option' do
-    @foo.stub(:new) do |command, options|
-      command.should == 'bar'
-      options.should == { :force => true }
-    end
+    @foo.should_receive(:new).with('bar', :force => true)
 
     Evm::Cli.parse(['foo', 'bar', '--force'])
   end
