@@ -1,20 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env ruby
 
-if [[ -n "$INSIDE_EMACS" ]]; then
-  EVM_EMACS="emacs"
-else
-  EVM_EMACS="${EMACS:-emacs}"
-fi
+require 'evm'
 
-export EVM_HOME=$(dirname $(dirname $0))
-
-if [[ -z $CASK ]]; then
-  CASK=$(which cask)
-fi
-
-if [[ -x $CASK ]]; then
-  cd $EVM_HOME && $CASK exec "${EVM_EMACS}" -Q --script "${EVM_HOME}/evm.el" -- "$@"
-else
-  echo "Cask not installed. See http://cask.github.io/installation"
-  exit 1
-fi
+Evm::Cli.parse(ARGV)
