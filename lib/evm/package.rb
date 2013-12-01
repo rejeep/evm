@@ -39,7 +39,7 @@ module Evm
     end
 
     def uninstall!
-      path.rmtree
+      path.rmtree if path.exist?
 
       if current?
         Package.current_file.delete

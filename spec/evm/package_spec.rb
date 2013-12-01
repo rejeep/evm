@@ -134,15 +134,25 @@ describe Evm::Package do
 
   describe '#uninstall!' do
     before do
-      path = double('path')
-      path.should_receive(:rmtree)
+      @path = double('path')
+      @path.stub(:exist?).and_return(false)
 
-      foo.stub(:path).and_return(path)
+      foo.stub(:path).and_return(@path)
     end
 
-    it 'should remove installation path' do
-      foo.stub(:current?).and_return(false)
+    it 'should remove installation path if exists' do
+      @path.should_receive(:rmtree)
+      @path.stub(:exist?).and_return(true)
 
+      foo.stub(:current?).and_return(false)
+      foo.uninstall!
+    end
+
+    it 'should not remove installation path if not exists' do
+      @path.should_not_receive(:rmtree)
+      @path.stub(:exist?).and_return(false)
+
+      foo.stub(:current?).and_return(false)
       foo.uninstall!
     end
 
