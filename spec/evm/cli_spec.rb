@@ -25,10 +25,16 @@ describe Evm::Cli do
     Evm::Cli.parse(['foo', '--force'])
   end
 
-  it 'should create command class with argument and option' do
+  it 'should support force option' do
     @foo.should_receive(:new).with('bar', :force => true)
 
     Evm::Cli.parse(['foo', 'bar', '--force'])
+  end
+
+  it 'should support use option' do
+    @foo.should_receive(:new).with('bar', :use => true)
+
+    Evm::Cli.parse(['foo', 'bar', '--use'])
   end
 
   it 'should print usage and die if option --help/-h' do

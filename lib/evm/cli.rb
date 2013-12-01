@@ -7,6 +7,10 @@ module Evm
         options[:force] = !!argv.delete('--force')
       end
 
+      if argv.include?('--use')
+        options[:use] = !!argv.delete('--use')
+      end
+
       if argv.include?('--help') || argv.include?('-h')
         Evm.print_usage_and_die
       end

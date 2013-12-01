@@ -17,6 +17,10 @@ module Evm
         else
           package.install!
 
+          if options[:use]
+            package.use!
+          end
+
           STDOUT.puts "Successfully installed #{package_name}"
         end
       end

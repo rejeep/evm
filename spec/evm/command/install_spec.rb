@@ -44,6 +44,20 @@ describe Evm::Command::Install do
     Evm::Command::Install.new('foo', :force => true)
   end
 
+  it 'should install and use if --use option' do
+    Evm::Package.stub(:find) do |package_name|
+      package = double('package')
+      package.should_receive(:use!)
+      package.should_receive(:install!)
+      package.stub(:installed?).and_return(false)
+      package
+    end
+
+    STDOUT.should_receive(:puts).with('Successfully installed foo')
+
+    Evm::Command::Install.new('foo', :use => true)
+  end
+
   it 'should raise exception if already installed' do
     Evm::Package.stub(:find) do |package_name|
       package = double('package')
