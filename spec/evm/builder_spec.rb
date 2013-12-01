@@ -126,6 +126,14 @@ describe Evm::Builder do
       end
     end
 
+    describe '#installations_path' do
+      it 'should return package installations path' do
+        @dsl.recipe 'name' do
+          @dsl.installations_path.to_s.should == '/usr/local/evm'
+        end
+      end
+    end
+
     describe '#platform_name' do
       it 'should platform name' do
         Evm::Os.stub(:platform_name).and_return(:foo)

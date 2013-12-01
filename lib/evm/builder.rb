@@ -49,8 +49,12 @@ module Evm
         Evm.local.join('tmp', @name)
       end
 
+      def installations_path
+        Evm.local
+      end
+
       def installation_path
-        Evm.local.join(@name)
+        installations_path.join(@name)
       end
 
       def platform_name
