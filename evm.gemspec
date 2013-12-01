@@ -20,7 +20,15 @@ Gem::Specification.new do |s|
     'lib/evm/recipe.rb',
     'lib/evm/system.rb',
     'lib/evm/tar_file.rb',
-    'lib/evm.rb'
+    'lib/evm.rb',
+    'recipes/emacs-23.4-bin.rb',
+    'recipes/emacs-23.4.rb',
+    'recipes/emacs-24.1-bin.rb',
+    'recipes/emacs-24.1.rb',
+    'recipes/emacs-24.2-bin.rb',
+    'recipes/emacs-24.2.rb',
+    'recipes/emacs-24.3-bin.rb',
+    'recipes/emacs-24.3.rb'
   ]
   s.homepage    = 'http://github.com/rejeep/evm'
   s.license     = 'MIT'
