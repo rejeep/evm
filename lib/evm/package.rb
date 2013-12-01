@@ -33,6 +33,8 @@ module Evm
     end
 
     def install!
+      path.mkdir unless path.exist?
+
       Evm::Builder.new(recipe).build!
     end
 
