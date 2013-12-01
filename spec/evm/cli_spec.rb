@@ -31,15 +31,21 @@ describe Evm::Cli do
     Evm::Cli.parse(['foo', 'bar', '--force'])
   end
 
+  it 'should print usage and die if option --help/-h' do
+    @foo.stub(:new)
+
+    Evm.should_receive(:print_usage_and_die)
+
+    Evm::Cli.parse(['foo', '--help', 'bar'])
+  end
+
   it 'should print message and exit if evm exception' do
     @foo.stub(:new) do |command, options|
       raise Evm::Exception.new('BooM')
     end
 
-    STDERR.should_receive(:puts).with('BooM')
+    Evm.should_receive(:die).with('No such command: foo')
 
-    expect {
-      Evm::Cli.parse(['foo'])
-    }.to raise_error(SystemExit)
+    Evm::Cli.parse(['foo'])
   end
 end
