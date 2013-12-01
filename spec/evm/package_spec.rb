@@ -109,6 +109,29 @@ describe Evm::Package do
   end
 
   describe '#uninstall!' do
+    before do
+      path = double('path')
+      path.should_receive(:rmtree)
+
+      foo.stub(:path).and_return(path)
+    end
+
+    it 'should remove installation path' do
+      foo.stub(:current?).and_return(false)
+
+      foo.uninstall!
+    end
+
+    it 'should remove current file if current' do
+      foo.stub(:current?).and_return(true)
+
+      current_file = double('current_file')
+      current_file.should_receive(:delete)
+
+      Evm::Package.should_receive(:current_file).and_return(current_file)
+
+      foo.uninstall!
+    end
   end
 
   describe '#to_s' do

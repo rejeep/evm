@@ -37,6 +37,11 @@ module Evm
     end
 
     def uninstall!
+      path.rmtree
+
+      if current?
+        Package.current_file.delete
+      end
     end
 
     def to_s
