@@ -28,4 +28,20 @@ describe Evm::Os do
       Evm::Os.linux?.should be_false
     end
   end
+
+  describe '.platform_name' do
+    it 'should be osx when osx' do
+      Evm::Os.stub(:osx?).and_return(true)
+      Evm::Os.stub(:linux?).and_return(false)
+
+      Evm::Os.platform_name.should == :osx
+    end
+
+    it 'should be linux when linux' do
+      Evm::Os.stub(:osx?).and_return(false)
+      Evm::Os.stub(:linux?).and_return(true)
+
+      Evm::Os.platform_name.should == :linux
+    end
+  end
 end
