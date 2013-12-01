@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require 'evm'
+
+package = Evm::Package.current
+
+system = Evm::System.new(package.bin.to_s)
+system.run(ARGV)
