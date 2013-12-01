@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Evm::Os do
-  describe '#osx?' do
+  describe '.osx?' do
     it 'should be osx when osx' do
       stub_const('RUBY_PLATFORM', 'x86_64-darwin12.3.0')
 
@@ -15,7 +15,7 @@ describe Evm::Os do
     end
   end
 
-  describe '#linux?' do
+  describe '.linux?' do
     it 'should be linux when linux' do
       stub_const('RUBY_PLATFORM', 'x86_64-linux')
 
