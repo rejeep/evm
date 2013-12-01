@@ -53,6 +53,10 @@ module Evm
         Evm.local.join(@name)
       end
 
+      def platform_name
+        Evm::Os.platform_name
+      end
+
       def copy(from, to)
         FileUtils.cp_r(from, to)
       end
