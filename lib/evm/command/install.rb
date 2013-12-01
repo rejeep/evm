@@ -2,6 +2,10 @@ module Evm
   module Command
     class Install
       def initialize(package_name, options = {})
+        unless package_name
+          raise Evm::Exception.new('The install command requires an argument')
+        end
+
         package = Evm::Package.find(package_name)
 
         if options[:force]

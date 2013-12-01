@@ -56,4 +56,10 @@ describe Evm::Command::Install do
       Evm::Command::Install.new('foo')
     }.to raise_error('Already installed foo')
   end
+
+  it 'should raise exception if no package name' do
+    expect {
+      Evm::Command::Install.new(nil)
+    }.to raise_error('The install command requires an argument')
+  end
 end
