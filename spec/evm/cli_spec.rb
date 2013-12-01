@@ -39,13 +39,19 @@ describe Evm::Cli do
     Evm::Cli.parse(['foo', '--help', 'bar'])
   end
 
-  it 'should print message and exit if evm exception' do
+  it 'should print message and exit if exception creating command class' do
     @foo.stub(:new) do |command, options|
       raise Evm::Exception.new('BooM')
     end
 
-    Evm.should_receive(:die).with('No such command: foo')
+    Evm.should_receive(:die).with('BooM')
 
     Evm::Cli.parse(['foo'])
+  end
+
+  it 'should print message and exit if command not found' do
+    Evm.should_receive(:die).with('No such command: bar')
+
+    Evm::Cli.parse(['bar'])
   end
 end
