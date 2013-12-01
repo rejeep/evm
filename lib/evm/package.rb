@@ -27,12 +27,13 @@ module Evm
     end
 
     def use!
-      File.open(current_file, 'w') do |file|
+      File.open(Package.current_file, 'w') do |file|
         file.write(@name)
       end
     end
 
     def install!
+      Evm::Builder.new(recipe).build!
     end
 
     def uninstall!
@@ -40,6 +41,10 @@ module Evm
 
     def to_s
       @name
+    end
+
+    def recipe
+      Evm::Recipe.find(@name)
     end
 
     class << self
@@ -54,15 +59,12 @@ module Evm
       end
 
       def find(package_name)
-        recipes = Evm::Recipe.all
-        recipes.each do |recipe|
-          package = Package.new(recipe.name)
-          if package.name == package_name
-            return package
-          end
+        recipe = Evm::Recipe.find(package_name)
+        if recipe
+          Package.new(package_name)
+        else
+          raise Evm::Exception.new("No such package: #{package_name}")
         end
-
-        raise Evm::Exception.new("No such package: #{package_name}")
       end
 
       def all

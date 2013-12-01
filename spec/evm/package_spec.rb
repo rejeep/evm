@@ -97,7 +97,8 @@ describe Evm::Package do
     it 'should write name to current file' do
       tempfile = Tempfile.new('foo')
 
-      foo.stub(:current_file).and_return(tempfile.to_s)
+      Evm::Package.stub(:current_file).and_return(tempfile.to_s)
+
       foo.use!
 
       File.read(tempfile.to_s).should == 'foo'
@@ -105,15 +106,9 @@ describe Evm::Package do
   end
 
   describe '#install!' do
-    it 'should ' do
-
-    end
   end
 
   describe '#uninstall!' do
-    it 'should ' do
-
-    end
   end
 
   describe '#to_s' do
@@ -149,19 +144,14 @@ describe Evm::Package do
   end
 
   describe '.find' do
-    before do
-      recipes = []
-      recipes << double('recipe-1', :name => 'foo')
-      recipes << double('recipe-2', :name => 'bar')
-
-      Evm::Recipe.stub(:all).and_return(recipes)
-    end
-
     it 'should return recipe with same name' do
+      Evm::Recipe.stub(:find).and_return({})
+
       Evm::Package.find('foo').name.should == 'foo'
     end
 
     it 'should raise exception if no recipe with same name' do
+      Evm::Recipe.stub(:find).and_return(nil)
       expect {
         Evm::Package.find('baz')
       }.to raise_error('No such package: baz')
