@@ -1,5 +1,3 @@
-require 'open-uri'
-
 module Evm
   class TarFile
     def initialize(name)
@@ -12,11 +10,10 @@ module Evm
       end
 
       unless tar_path.exist?
-        File.open(tar_path, 'wb') do |write_file|
-          open(url, 'rb') do |read_file|
-            write_file.write(read_file.read)
-          end
+        remote_file.save_to(tar_path) do |progress|
+          progress_bar.set(progress)
         end
+        progress_bar.done
       end
     end
 
@@ -46,6 +43,14 @@ module Evm
 
     def builds_path
       Evm.local.join('tmp')
+    end
+
+    def remote_file
+      @remote_file ||= Evm::RemoteFile.new(url)
+    end
+
+    def progress_bar
+      @progress_bar ||= Evm::ProgressBar.new
     end
   end
 end
