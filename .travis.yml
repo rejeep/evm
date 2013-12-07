@@ -8,7 +8,8 @@ before_install:
   - sudo apt-get build-dep -qq emacs23
   - sudo apt-get build-dep -qq emacs24
 
-  - bin/evm install $EVM_EMACS --use
+  - bin/evm install $EVM_EMACS
+  - bin/evm use $EVM_EMACS
 script:
   - bundle exec rspec spec
   - bin/emacs --version
