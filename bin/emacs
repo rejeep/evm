@@ -4,4 +4,8 @@ $: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'evm'
 
-exec Evm::Package.current.bin.to_s, *ARGV
+if current = Evm::Package.current
+  exec current.bin.to_s, *ARGV
+else
+  abort 'EVM: No Emacs selected. Select one using "evm use".'
+end
