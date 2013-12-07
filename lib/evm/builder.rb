@@ -14,10 +14,26 @@ module Evm
         yield
       end
 
-      def tar_gz(name)
-        tar_file = Evm::TarFile.new(name)
-        tar_file.download!
-        tar_file.extract!
+      def git(url)
+        git_repo = Evm::Git.new(build_path)
+        if git_repo.exist?
+          git_repo.pull
+        else
+          git_repo.clone(url)
+        end
+      end
+
+      def tar_gz(url)
+        tar_file_path = builds_path.join(@name + '.tar.gz')
+
+        remote_file = Evm::RemoteFile.new(url)
+        remote_file.download(tar_file_path) do |progress|
+          progress_bar.set(progress)
+        end
+        progress_bar.done
+
+        tar_file = Evm::TarFile.new(tar_file_path)
+        tar_file.extract(builds_path)
       end
 
       def osx(&block)
@@ -37,6 +53,10 @@ module Evm
         yield
       end
 
+      def autogen
+        run_command './autogen.sh'
+      end
+
       def configure
         run_command './configure', *@options
       end
@@ -45,8 +65,12 @@ module Evm
         run_command 'make', target
       end
 
+      def builds_path
+        Evm.local.join('tmp')
+      end
+
       def build_path
-        Evm.local.join('tmp', @name)
+        builds_path.join(@name)
       end
 
       def installations_path
@@ -66,6 +90,10 @@ module Evm
       end
 
       private
+
+      def progress_bar
+        @progress_bar ||= Evm::ProgressBar.new
+      end
 
       def run_command(command, *args)
         Dir.chdir(build_path) do

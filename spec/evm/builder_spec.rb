@@ -3,18 +3,64 @@ require 'spec_helper'
 describe Evm::Builder do
   describe Evm::Builder::Dsl do
     before do
+      @tar_gz_url = 'http://domain.com/foo.tar.gz'
+      @git_url = 'git://domain.com/emacs.git'
+
+      progress_bar = double('progress_bar')
+      progress_bar.stub(:set)
+      progress_bar.stub(:done)
+
       @dsl = Evm::Builder::Dsl.new
+      @dsl.stub(:path).and_return('/path/to')
+      @dsl.stub(:progress_bar).and_return(progress_bar)
     end
 
     describe '#tar_gz' do
       it 'should download and extract tar' do
+        tar_file_path = Pathname.new('/usr/local/evm/tmp/name.tar.gz')
+
+        remote_file = double('remote_file')
+        remote_file.should_receive(:download).with(tar_file_path)
+
+        Evm::RemoteFile.should_receive(:new).with(@tar_gz_url).and_return(remote_file)
+
         tar_file = double('tar_file')
-        tar_file.should_receive(:download!)
-        tar_file.should_receive(:extract!)
+        tar_file.should_receive(:extract).with Pathname.new('/usr/local/evm/tmp')
 
-        Evm::TarFile.should_receive(:new).with('foo.tar.gz').and_return(tar_file)
+        Evm::TarFile.should_receive(:new).with(tar_file_path).and_return(tar_file)
 
-        @dsl.tar_gz('foo.tar.gz')
+        @dsl.recipe 'name' do
+          @dsl.tar_gz(@tar_gz_url)
+        end
+      end
+    end
+
+    describe '#git' do
+      before do
+        @git_repo = double('git_repo')
+        @git_repo.stub(:exist?).and_return(true)
+        @git_repo.stub(:clone)
+        @git_repo.stub(:pull)
+
+        Evm::Git.stub(:new).and_return(@git_repo)
+      end
+
+      it 'should pull if exist' do
+        @git_repo.stub(:exist?).and_return(true)
+        @git_repo.should_receive(:pull)
+
+        @dsl.recipe 'name' do
+          @dsl.git(@git_url)
+        end
+      end
+
+      it 'should clone if not exist' do
+        @git_repo.stub(:exist?).and_return(false)
+        @git_repo.should_receive(:clone).with(@git_url)
+
+        @dsl.recipe 'name' do
+          @dsl.git(@git_url)
+        end
       end
     end
 
@@ -83,6 +129,13 @@ describe Evm::Builder do
       end
     end
 
+    describe '#autogen' do
+      it 'should run make command with target' do
+        @dsl.should_receive(:run_command).with('./autogen.sh')
+        @dsl.autogen
+      end
+    end
+
     describe '#configure' do
       it 'should configure when no options' do
         @dsl.should_receive(:run_command).with('./configure')
@@ -114,6 +167,14 @@ describe Evm::Builder do
       it 'should return package build path' do
         @dsl.recipe 'name' do
           @dsl.build_path.to_s.should == '/usr/local/evm/tmp/name'
+        end
+      end
+    end
+
+    describe '#builds_path' do
+      it 'should return package builds path' do
+        @dsl.recipe 'name' do
+          @dsl.builds_path.to_s.should == '/usr/local/evm/tmp'
         end
       end
     end
