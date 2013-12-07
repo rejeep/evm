@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'bundler/setup'
 
-require 'tempfile'
 require 'webmock/rspec'
 
 require 'evm'

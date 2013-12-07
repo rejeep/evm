@@ -1,22 +1,24 @@
 require 'spec_helper'
 
-require 'tempfile'
-
 describe Evm::Package do
-  let(:foo) do
-    foo = Evm::Package.new('foo')
-    foo.stub(:name).and_return('foo')
-    foo
+  before do
+    @tmp_path = double('tmp_file')
+    @tmp_path.stub(:exist?).and_return(true)
+
+    @foo = Evm::Package.new('foo')
+    @foo.stub(:name).and_return('foo')
+    @foo.stub(:tmp_path).and_return(@tmp_path)
+    @foo
   end
 
   describe '#current?' do
     it 'should be current if current name is same as name' do
-      Evm::Package.stub(:current).and_return(foo)
+      Evm::Package.stub(:current).and_return(@foo)
       Evm::Package.new('foo').should be_current
     end
 
     it 'should not be current if current name is different from name' do
-      Evm::Package.stub(:current).and_return(foo)
+      Evm::Package.stub(:current).and_return(@foo)
       Evm::Package.new('bar').should_not be_current
     end
 
@@ -28,27 +30,27 @@ describe Evm::Package do
 
   describe '#installed?' do
     it 'should be installed if path exists' do
-      foo.stub(:path) do
+      @foo.stub(:path) do
         path = double('path')
         path.stub(:exist?).and_return(true)
         path
       end
-      foo.should be_installed
+      @foo.should be_installed
     end
 
     it 'should not be installed if path does not exist' do
-      foo.stub(:path) do
+      @foo.stub(:path) do
         path = double('path')
         path.stub(:exist?).and_return(false)
         path
       end
-      foo.should_not be_installed
+      @foo.should_not be_installed
     end
   end
 
   describe '#path' do
     it 'should be path to package path' do
-      foo.path.to_s.should == '/usr/local/evm/foo'
+      @foo.path.to_s.should == '/usr/local/evm/foo'
     end
   end
 
@@ -57,7 +59,7 @@ describe Evm::Package do
       Evm::Os.stub(:osx?).and_return(false)
       Evm::Os.stub(:linux?).and_return(true)
 
-      foo.bin.to_s.should == '/usr/local/evm/foo/bin/emacs'
+      @foo.bin.to_s.should == '/usr/local/evm/foo/bin/emacs'
     end
 
     it 'should be bin/emacs if osx and no nextstep' do
@@ -71,9 +73,9 @@ describe Evm::Package do
       path.should_receive(:join).with('Emacs.app').and_return(join)
       path.should_receive(:join).with('bin', 'emacs').and_return('/usr/local/evm/foo/bin/emacs')
 
-      foo.stub(:path).and_return(path)
+      @foo.stub(:path).and_return(path)
 
-      foo.bin.to_s.should == '/usr/local/evm/foo/bin/emacs'
+      @foo.bin.to_s.should == '/usr/local/evm/foo/bin/emacs'
     end
 
     it 'should be nextstep bin if osx and nextstep' do
@@ -87,21 +89,24 @@ describe Evm::Package do
       path.should_receive(:join).with('Emacs.app').and_return(join)
       path.should_receive(:join).with('Emacs.app', 'Contents', 'MacOS', 'Emacs').and_return('/usr/local/evm/foo/Emacs.app/Contents/MacOS/Emacs')
 
-      foo.stub(:path).and_return(path)
+      @foo.stub(:path).and_return(path)
 
-      foo.bin.to_s.should == '/usr/local/evm/foo/Emacs.app/Contents/MacOS/Emacs'
+      @foo.bin.to_s.should == '/usr/local/evm/foo/Emacs.app/Contents/MacOS/Emacs'
     end
   end
 
   describe '#use!' do
     it 'should write name to current file' do
-      tempfile = Tempfile.new('foo')
+      current_file = double('current_file')
 
-      Evm::Package.stub(:current_file).and_return(tempfile.to_s)
+      file = double('file')
+      file.should_receive(:write).with('foo')
 
-      foo.use!
+      File.should_receive(:open).with(current_file, 'w').and_yield(file)
 
-      File.read(tempfile.to_s).should == 'foo'
+      Evm::Package.stub(:current_file).and_return(current_file)
+
+      @foo.use!
     end
   end
 
@@ -115,41 +120,35 @@ describe Evm::Package do
 
       Evm::Builder.stub(:new).and_return(@builder)
 
-      foo.stub(:path).and_return(@path)
+      @foo.stub(:path).and_return(@path)
     end
 
     it 'should create installation path if not exist' do
       @path.should_receive(:mkdir)
       @path.stub(:exist?).and_return(false)
 
-      foo.install!
+      @foo.install!
     end
 
     it 'should not create installation path if exists' do
       @path.should_not_receive(:mkdir)
       @path.stub(:exist?).and_return(true)
 
-      foo.install!
+      @foo.install!
     end
 
     it 'should create tmp path if not exist' do
-      tmp_path = double('tmp_file')
-      tmp_path.should_receive(:mkdir)
-      tmp_path.stub(:exist?).and_return(false)
+      @tmp_path.should_receive(:mkdir)
+      @tmp_path.stub(:exist?).and_return(false)
 
-      foo.stub(:tmp_path).and_return(tmp_path)
-
-      foo.install!
+      @foo.install!
     end
 
     it 'should not create installation path if exists' do
-      tmp_path = double('tmp_file')
-      tmp_path.should_not_receive(:mkdir)
-      tmp_path.stub(:exist?).and_return(true)
+      @tmp_path.should_not_receive(:mkdir)
+      @tmp_path.stub(:exist?).and_return(true)
 
-      foo.stub(:tmp_path).and_return(tmp_path)
-
-      foo.install!
+      @foo.install!
     end
   end
 
@@ -158,40 +157,40 @@ describe Evm::Package do
       @path = double('path')
       @path.stub(:exist?).and_return(false)
 
-      foo.stub(:path).and_return(@path)
+      @foo.stub(:path).and_return(@path)
     end
 
     it 'should remove installation path if exists' do
       @path.should_receive(:rmtree)
       @path.stub(:exist?).and_return(true)
 
-      foo.stub(:current?).and_return(false)
-      foo.uninstall!
+      @foo.stub(:current?).and_return(false)
+      @foo.uninstall!
     end
 
     it 'should not remove installation path if not exists' do
       @path.should_not_receive(:rmtree)
       @path.stub(:exist?).and_return(false)
 
-      foo.stub(:current?).and_return(false)
-      foo.uninstall!
+      @foo.stub(:current?).and_return(false)
+      @foo.uninstall!
     end
 
     it 'should remove current file if current' do
-      foo.stub(:current?).and_return(true)
+      @foo.stub(:current?).and_return(true)
 
       current_file = double('current_file')
       current_file.should_receive(:delete)
 
       Evm::Package.should_receive(:current_file).and_return(current_file)
 
-      foo.uninstall!
+      @foo.uninstall!
     end
   end
 
   describe '#to_s' do
     it 'should return name' do
-      foo.to_s.should == 'foo'
+      @foo.to_s.should == 'foo'
     end
   end
 
