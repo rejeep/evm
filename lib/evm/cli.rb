@@ -12,7 +12,7 @@ module Evm
       end
 
       if argv.include?('--help') || argv.include?('-h')
-        Evm.print_usage_and_die
+        Evm.print_usage_and_exit
       end
 
       command, argument = argv
@@ -20,13 +20,13 @@ module Evm
       begin
         const = Evm::Command.const_get(command.capitalize)
       rescue NameError => exception
-        Evm.die "No such command: #{command}"
+        Evm.abort 'No such command:', command
       end
 
       begin
         const.new(argument, options)
       rescue => exception
-        Evm.die exception.message
+        Evm.abort exception.message
       end
     end
   end

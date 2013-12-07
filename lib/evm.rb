@@ -9,17 +9,14 @@ module Evm
     Pathname.new('/').join('usr', 'local', 'evm')
   end
 
-  def self.die(*args)
-    args.each do |arg|
-      STDERR.print(arg)
-      STDERR.puts
-    end
+  def self.abort(*args)
+    STDERR.puts args.join(' ')
 
     exit 1
   end
 
-  def self.print_usage_and_die
-    die <<-EOS
+  def self.print_usage_and_exit
+    Evm.abort <<-EOS
 USAGE: evm COMMAND [OPTIONS]
 
 Emacs Version Manager

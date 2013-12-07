@@ -40,7 +40,7 @@ describe Evm::Cli do
   it 'should print usage and die if option --help/-h' do
     @foo.stub(:new)
 
-    Evm.should_receive(:print_usage_and_die)
+    Evm.should_receive(:print_usage_and_exit)
 
     Evm::Cli.parse(['foo', '--help', 'bar'])
   end
@@ -50,8 +50,7 @@ describe Evm::Cli do
       raise Evm::Exception.new('BooM')
     end
 
-    STDERR.should_receive(:print).with('BooM')
-    STDERR.should_receive(:puts)
+    STDERR.should_receive(:puts).with('BooM')
 
     expect {
       Evm::Cli.parse(['foo'])
@@ -63,8 +62,7 @@ describe Evm::Cli do
       raise 'BooM'
     end
 
-    STDERR.should_receive(:print).with('BooM')
-    STDERR.should_receive(:puts)
+    STDERR.should_receive(:puts).with('BooM')
 
     expect {
       Evm::Cli.parse(['foo'])
@@ -73,8 +71,7 @@ describe Evm::Cli do
   end
 
   it 'should print message and exit if command not found' do
-    STDERR.should_receive(:print).with('No such command: bar')
-    STDERR.should_receive(:puts)
+    STDERR.should_receive(:puts).with('No such command: bar')
 
     expect {
       Evm::Cli.parse(['bar'])
