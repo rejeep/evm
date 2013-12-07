@@ -5,16 +5,7 @@ module Evm
     end
 
     def run(*args)
-      command = build_command(args)
-      unless Kernel.system(command)
-        raise Evm::Exception.new("An error occurred running command: #{command}")
-      end
-    end
-
-    private
-
-    def build_command(args)
-      ([@executable] + args).join(' ')
+      Kernel.exec(@executable, *args)
     end
   end
 end

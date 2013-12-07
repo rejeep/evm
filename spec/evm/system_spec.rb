@@ -7,29 +7,21 @@ describe Evm::System do
 
   describe '#run' do
     it 'should run when no arguments' do
-      Kernel.should_receive(:system).with('command').and_return(true)
+      Kernel.should_receive(:exec).with('command')
 
       @system.run
     end
 
     it 'should run with single argument' do
-      Kernel.should_receive(:system).with('command foo').and_return(true)
+      Kernel.should_receive(:exec).with('command', 'foo')
 
       @system.run('foo')
     end
 
     it 'should run with single argument' do
-      Kernel.should_receive(:system).with('command foo bar').and_return(true)
+      Kernel.should_receive(:exec).with('command', 'foo', 'bar')
 
       @system.run('foo', 'bar')
-    end
-
-    it 'should raise exception if command failed' do
-      Kernel.stub(:system).and_return(false)
-
-      expect {
-        @system.run('foo', 'bar')
-      }.to raise_error('An error occurred running command: command foo bar')
     end
   end
 end
