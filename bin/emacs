@@ -4,5 +4,4 @@ $: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'evm'
 
-system = Evm::System.new(Evm::Package.current.bin.to_s)
-system.run(*ARGV)
+exec Evm::Package.current.bin.to_s, *ARGV
