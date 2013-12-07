@@ -81,6 +81,13 @@ $ export PATH="~/.evm/bin:$PATH"
 
 ## Usage
 
+In the Evm `bin` directory, there are two commands:
+
+* `evm` - Manage Emacs packages
+* `emacs` - Emacs binary for currently selected Emacs package
+
+### list
+
 To list all available Emacs versions you can install, run:
 
 ```sh
@@ -103,6 +110,8 @@ shows what version is currently selected.
 
 _NOTE: The versions with the `-bin` suffix should only to be used for testing._
 
+### install <name>
+
 To install a version, run:
 
 ```sh
@@ -115,10 +124,12 @@ Example:
 $ evm install emacs-24.3
 ```
 
-To start using a specific version, run:
+### use <name>
+
+To start using a specific package, run:
 
 ```sh
-$ evm use version
+$ evm use name
 ```
 
 Example:
@@ -127,11 +138,27 @@ Example:
 $ evm use emacs-24.2
 ```
 
+The Evm `emacs` binary will update and use that Emacs package.
+
+### uninstall <name>
+
 To uninstall a version, run:
 
 ```sh
 $ evm uninstall emacs-24.2
 ```
+
+### bin [name]
+
+Prints the full path to `name`'s Emacs executable. If no name is
+specified, use currently selected.
+
+```sh
+$ evm bin
+$ evm bin emacs-24.2
+```
+
+### help
 
 For more information, run:
 
