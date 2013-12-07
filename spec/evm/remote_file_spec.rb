@@ -5,15 +5,12 @@ describe Evm::RemoteFile do
     @path = Pathname.new('/path/to/emacs-24.3.tar.gz')
     @path.stub(:exist?).and_return(true)
 
-    @url = 'http://domain.com/emacs-24.3.tar.gz'
+    @url = 'http://mirror.com/emacs-24.3.tar.gz'
 
     @file = double('file')
     @file.stub(:close)
 
     File.stub(:open).and_return(@file)
-
-    stub_request(:get, @url).
-      to_return(:status => 200, :body => 'COMPRESSED-DATA', :headers => { 'Content-Length' => 1234 })
 
     @remote_file = Evm::RemoteFile.new(@url)
   end
@@ -22,6 +19,22 @@ describe Evm::RemoteFile do
     it 'should download to path' do
       @path.stub(:exist?).and_return(false)
 
+      stub_request(:get, @url).
+        to_return(:status => 200, :body => 'COMPRESSED-DATA', :headers => { 'Content-Length' => 1234 })
+
+
+      @file.should_receive(:write).with('COMPRESSED-DATA')
+
+      @remote_file.download(@path)
+    end
+
+    it 'should download to path' do
+      @path.stub(:exist?).and_return(false)
+
+      stub_request(:get, @url).
+        to_return(:status => 302, :headers => { 'location' => @url }).then.
+        to_return(:status => 200, :body => 'COMPRESSED-DATA', :headers => { 'Content-Length' => 1234 })
+
       @file.should_receive(:write).with('COMPRESSED-DATA')
 
       @remote_file.download(@path)
@@ -29,6 +42,9 @@ describe Evm::RemoteFile do
 
     it 'should close file' do
       @path.stub(:exist?).and_return(false)
+
+      stub_request(:get, @url).
+        to_return(:status => 200, :body => 'COMPRESSED-DATA', :headers => { 'Content-Length' => 1234 })
 
       file = double('file')
       file.should_receive(:close)

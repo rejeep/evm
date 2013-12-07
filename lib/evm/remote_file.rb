@@ -5,7 +5,7 @@ require 'net/http'
 module Evm
   class RemoteFile
     def initialize(url)
-      @url = URI.parse(url)
+      @url = url
     end
 
     def download(path, &block)
@@ -17,8 +17,7 @@ module Evm
         this = Thread.current
         body = this[:body] = []
 
-        http = Net::HTTP.new(@url.host, @url.port)
-        http.request_get(@url.path) do |response|
+        request @url do |response|
           length = this[:length] = response['Content-Length'].to_i
 
           response.read_body do |fragment|
@@ -37,6 +36,26 @@ module Evm
       end
 
       file.close
+    end
+
+    private
+
+    def request(url, &block)
+      uri = URI.parse(url)
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.request_get(uri.path) do |response|
+        case response
+        when Net::HTTPSuccess
+          block.call(response)
+        when Net::HTTPRedirection
+          request response['location'] do |response|
+            block.call(response)
+          end
+        else
+          response.error!
+        end
+      end
     end
   end
 end
