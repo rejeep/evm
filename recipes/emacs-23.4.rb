@@ -1,5 +1,5 @@
 recipe 'emacs-23.4' do
-  tar_gz 'emacs-23.4.tar.gz'
+  tar_gz 'http://ftpmirror.gnu.org/emacs/emacs-23.4.tar.gz'
 
   osx do
     option '--with-ns'
