@@ -4,7 +4,7 @@ $: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'evm'
 
-package = Evm::Package.current
+arguments = ARGV.map { |argument| "'#{argument}'" }
 
-system = Evm::System.new(package.bin.to_s)
-system.run(ARGV)
+system = Evm::System.new(Evm::Package.current.bin.to_s)
+system.run(*arguments)
