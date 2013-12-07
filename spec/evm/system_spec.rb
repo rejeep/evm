@@ -7,19 +7,19 @@ describe Evm::System do
 
   describe '#run' do
     it 'should run when no arguments' do
-      Kernel.should_receive(:exec).with('command')
+      Kernel.should_receive(:system).with('command')
 
       @system.run
     end
 
     it 'should run with single argument' do
-      Kernel.should_receive(:exec).with('command', 'foo')
+      Kernel.should_receive(:system).with('command', 'foo')
 
       @system.run('foo')
     end
 
     it 'should run with single argument' do
-      Kernel.should_receive(:exec).with('command', 'foo', 'bar')
+      Kernel.should_receive(:system).with('command', 'foo', 'bar')
 
       @system.run('foo', 'bar')
     end

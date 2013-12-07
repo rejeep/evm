@@ -5,7 +5,7 @@ module Evm
     end
 
     def run(*args)
-      Kernel.exec(@executable, *args)
+      Kernel.system(@executable, *args)
     end
   end
 end
