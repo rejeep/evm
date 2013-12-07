@@ -14,10 +14,6 @@ module Evm
       path.exist?
     end
 
-    def path
-      Evm.local.join(@name)
-    end
-
     def bin
       if Evm::Os.osx? && path.join('Emacs.app').exist?
         path.join('Emacs.app', 'Contents', 'MacOS', 'Emacs')
@@ -33,7 +29,13 @@ module Evm
     end
 
     def install!
-      path.mkdir unless path.exist?
+      unless path.exist?
+        path.mkdir
+      end
+
+      unless tmp_path.exist?
+        tmp_path.mkdir
+      end
 
       Evm::Builder.new(recipe).build!
     end
@@ -52,6 +54,14 @@ module Evm
 
     def recipe
       Evm::Recipe.find(@name)
+    end
+
+    def path
+      Evm.local.join(@name)
+    end
+
+    def tmp_path
+      Evm.local.join('tmp')
     end
 
     class << self

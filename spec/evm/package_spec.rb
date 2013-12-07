@@ -108,6 +108,7 @@ describe Evm::Package do
   describe '#install!' do
     before do
       @path = double('path')
+      @path.stub(:exist?).and_return(true)
 
       @builder = double('builder')
       @builder.should_receive(:build!)
@@ -124,9 +125,29 @@ describe Evm::Package do
       foo.install!
     end
 
-    it 'should not create installation path if not exists' do
+    it 'should not create installation path if exists' do
       @path.should_not_receive(:mkdir)
       @path.stub(:exist?).and_return(true)
+
+      foo.install!
+    end
+
+    it 'should create tmp path if not exist' do
+      tmp_path = double('tmp_file')
+      tmp_path.should_receive(:mkdir)
+      tmp_path.stub(:exist?).and_return(false)
+
+      foo.stub(:tmp_path).and_return(tmp_path)
+
+      foo.install!
+    end
+
+    it 'should not create installation path if exists' do
+      tmp_path = double('tmp_file')
+      tmp_path.should_not_receive(:mkdir)
+      tmp_path.stub(:exist?).and_return(true)
+
+      foo.stub(:tmp_path).and_return(tmp_path)
 
       foo.install!
     end
