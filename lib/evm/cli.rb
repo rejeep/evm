@@ -19,10 +19,13 @@ module Evm
 
       begin
         const = Evm::Command.const_get(command.capitalize)
-        const.new(argument, options)
-      rescue NameError
+      rescue NameError => exception
         Evm.die "No such command: #{command}"
-      rescue Evm::Exception => exception
+      end
+
+      begin
+        const.new(argument, options)
+      rescue => exception
         Evm.die exception.message
       end
     end
