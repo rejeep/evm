@@ -17,7 +17,7 @@ recipe 'emacs-24.1' do
     make 'install'
 
     osx do
-      copy build_path.join('nextstep', 'Emacs.app'), installation_path
+      copy File.join(build_path, 'nextstep', 'Emacs.app'), installation_path
     end
   end
 end

@@ -24,7 +24,7 @@ module Evm
       end
 
       def tar_gz(url)
-        tar_file_path = builds_path.join(@name + '.tar.gz')
+        tar_file_path = File.join(builds_path, @name + '.tar.gz')
 
         remote_file = Evm::RemoteFile.new(url)
         remote_file.download(tar_file_path) do |progress|
@@ -66,19 +66,19 @@ module Evm
       end
 
       def builds_path
-        Evm.local.join('tmp')
+        File.join(Evm::LOCAL_PATH, 'tmp')
       end
 
       def build_path
-        builds_path.join(@name)
+        File.join(builds_path, @name)
       end
 
       def installations_path
-        Evm.local
+        Evm::LOCAL_PATH
       end
 
       def installation_path
-        installations_path.join(@name)
+        File.join(installations_path, @name)
       end
 
       def platform_name
@@ -96,7 +96,7 @@ module Evm
       end
 
       def run_command(command, *args)
-        Dir.chdir(build_path.to_s) do
+        Dir.chdir(build_path) do
           system = Evm::System.new(command)
           system.run(*args)
         end

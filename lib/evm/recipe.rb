@@ -1,6 +1,6 @@
 module Evm
   class Recipe
-    RECIPE_PATH = Evm.root.join('recipes')
+    RECIPES_PATH = File.join(Evm::ROOT_PATH, 'recipes')
 
     attr_reader :name
 
@@ -31,7 +31,7 @@ module Evm
       end
 
       def all
-        Dir.glob(RECIPE_PATH.join('*.rb')).map do |recipe_file|
+        Dir.glob(File.join(RECIPES_PATH, '*.rb')).map do |recipe_file|
           Recipe.new(recipe_file)
         end
       end

@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe Evm::RemoteFile do
   before do
-    @path = Pathname.new('/path/to/emacs-24.3.tar.gz')
-    @path.stub(:exist?).and_return(true)
+    @path = '/path/to/emacs-24.3.tar.gz'
 
     @url = 'http://mirror.com/emacs-24.3.tar.gz'
 
     @file = double('file')
     @file.stub(:close)
 
+    File.stub(:exist?).with(@path).and_return(false)
     File.stub(:open).and_return(@file)
 
     @remote_file = Evm::RemoteFile.new(@url)
@@ -17,8 +17,6 @@ describe Evm::RemoteFile do
 
   describe '#download' do
     it 'should download to path' do
-      @path.stub(:exist?).and_return(false)
-
       stub_request(:get, @url).
         to_return(:status => 200, :body => 'COMPRESSED-DATA', :headers => { 'Content-Length' => 1234 })
 
@@ -29,8 +27,6 @@ describe Evm::RemoteFile do
     end
 
     it 'should download to path' do
-      @path.stub(:exist?).and_return(false)
-
       stub_request(:get, @url).
         to_return(:status => 302, :headers => { 'location' => @url }).then.
         to_return(:status => 200, :body => 'COMPRESSED-DATA', :headers => { 'Content-Length' => 1234 })
@@ -41,8 +37,6 @@ describe Evm::RemoteFile do
     end
 
     it 'should close file' do
-      @path.stub(:exist?).and_return(false)
-
       stub_request(:get, @url).
         to_return(:status => 200, :body => 'COMPRESSED-DATA', :headers => { 'Content-Length' => 1234 })
 
@@ -56,7 +50,7 @@ describe Evm::RemoteFile do
     end
 
     it 'should not download if already exist' do
-      @path.stub(:exist?).and_return(true)
+      File.stub(:exist?).with(@path).and_return(true)
 
       @remote_file.download(@path)
     end
