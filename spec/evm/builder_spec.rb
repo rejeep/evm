@@ -17,7 +17,7 @@ describe Evm::Builder do
 
     describe '#tar_gz' do
       it 'should download and extract tar' do
-        tar_file_path = Pathname.new('/usr/local/evm/tmp/name.tar.gz')
+        tar_file_path = '/usr/local/evm/tmp/name.tar.gz'
 
         remote_file = double('remote_file')
         remote_file.should_receive(:download).with(tar_file_path)
@@ -25,7 +25,7 @@ describe Evm::Builder do
         Evm::RemoteFile.should_receive(:new).with(@tar_gz_url).and_return(remote_file)
 
         tar_file = double('tar_file')
-        tar_file.should_receive(:extract).with Pathname.new('/usr/local/evm/tmp')
+        tar_file.should_receive(:extract).with('/usr/local/evm/tmp')
 
         Evm::TarFile.should_receive(:new).with(tar_file_path).and_return(tar_file)
 
@@ -166,7 +166,7 @@ describe Evm::Builder do
     describe '#build_path' do
       it 'should return package build path' do
         @dsl.recipe 'name' do
-          @dsl.build_path.to_s.should == '/usr/local/evm/tmp/name'
+          @dsl.build_path.should == '/usr/local/evm/tmp/name'
         end
       end
     end
@@ -174,7 +174,7 @@ describe Evm::Builder do
     describe '#builds_path' do
       it 'should return package builds path' do
         @dsl.recipe 'name' do
-          @dsl.builds_path.to_s.should == '/usr/local/evm/tmp'
+          @dsl.builds_path.should == '/usr/local/evm/tmp'
         end
       end
     end
@@ -182,7 +182,7 @@ describe Evm::Builder do
     describe '#installation_path' do
       it 'should return package installation path' do
         @dsl.recipe 'name' do
-          @dsl.installation_path.to_s.should == '/usr/local/evm/name'
+          @dsl.installation_path.should == '/usr/local/evm/name'
         end
       end
     end
@@ -190,7 +190,7 @@ describe Evm::Builder do
     describe '#installations_path' do
       it 'should return package installations path' do
         @dsl.recipe 'name' do
-          @dsl.installations_path.to_s.should == '/usr/local/evm'
+          @dsl.installations_path.should == '/usr/local/evm'
         end
       end
     end
@@ -208,23 +208,6 @@ describe Evm::Builder do
         FileUtils.should_receive(:cp_r).with('from', 'to')
 
         @dsl.copy 'from', 'to'
-      end
-    end
-
-    describe '#run_command' do
-      it 'should not change dir with pathname' do
-        @dsl.stub(:build_path) do
-          Pathname.new('/some/path')
-        end
-
-        Dir.should_receive(:chdir).with('/some/path')
-
-        system = double('system')
-        system.stub(:run)
-
-        Evm::System.stub(:new).and_return(system)
-
-        @dsl.send(:run_command, ['foo', ['bar', 'baz']])
       end
     end
   end

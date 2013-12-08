@@ -11,14 +11,14 @@ module Evm
     end
 
     def installed?
-      path.exist?
+      File.exist?(path)
     end
 
     def bin
-      if Evm::Os.osx? && path.join('Emacs.app').exist?
-        path.join('Emacs.app', 'Contents', 'MacOS', 'Emacs')
+      if Evm::Os.osx? && File.exist?(File.join(path, 'Emacs.app'))
+        File.join(path, 'Emacs.app', 'Contents', 'MacOS', 'Emacs')
       else
-        path.join('bin', 'emacs')
+        File.join(path, 'bin', 'emacs')
       end
     end
 
@@ -29,22 +29,24 @@ module Evm
     end
 
     def install!
-      unless path.exist?
-        path.mkdir
+      unless File.exist?(path)
+        Dir.mkdir(path)
       end
 
-      unless tmp_path.exist?
-        tmp_path.mkdir
+      unless File.exist?(tmp_path)
+        Dir.mkdir(tmp_path)
       end
 
       Evm::Builder.new(recipe).build!
     end
 
     def uninstall!
-      path.rmtree if path.exist?
+      if File.exist?(path)
+        FileUtils.rm_r(path)
+      end
 
       if current?
-        Package.current_file.delete
+        File.delete(Package.current_file)
       end
     end
 
@@ -57,21 +59,21 @@ module Evm
     end
 
     def path
-      Evm.local.join(@name)
+      File.join(Evm::LOCAL_PATH, @name)
     end
 
     def tmp_path
-      Evm.local.join('tmp')
+      File.join(Evm::LOCAL_PATH, 'tmp')
     end
 
     class << self
       def current_file
-        Evm.local.join('current')
+        File.join(Evm::LOCAL_PATH, 'current')
       end
 
       def current
-        if current_file.exist?
-          find(current_file.read)
+        if File.exist?(current_file)
+          find File.read(current_file)
         end
       end
 

@@ -5,7 +5,7 @@ module Evm
     end
 
     def extract(extract_to)
-      tar '-xzf', @tar_file.to_s, '-C', extract_to.to_s
+      tar '-xzf', @tar_file, '-C', extract_to
     end
 
     private

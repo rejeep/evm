@@ -2,35 +2,35 @@ require 'spec_helper'
 
 describe Evm::Git do
   before do
-    @path = double('path')
-    @path.stub(:to_s).and_return('/path')
-    @path.stub(:exist?).and_return(true)
+    @path = '/path/to/git'
 
     @git = Evm::Git.new(@path)
   end
 
   describe 'exist?' do
     it 'should exist when path does exist' do
-      @path.stub(:exist?).and_return(false)
+      File.stub(:exist?).and_return(false)
+
       @git.exist?.should == false
     end
 
     it 'should not exist when path does not exist' do
-      @path.stub(:exist?).and_return(true)
+      File.stub(:exist?).and_return(true)
+
       @git.exist?.should == true
     end
   end
 
   describe 'clone' do
     it 'should clone url to path' do
-      @git.should_receive(:git).with('clone', 'URL', '/path')
+      @git.should_receive(:git).with('clone', 'URL', @path)
       @git.clone('URL')
     end
   end
 
   describe 'pull' do
     it 'should pull in path' do
-      Dir.should_receive(:chdir).with('/path').and_yield
+      Dir.should_receive(:chdir).with(@path).and_yield
 
       @git.should_receive(:git).with('pull')
       @git.pull

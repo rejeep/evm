@@ -1,13 +1,8 @@
-require 'pathname'
+require 'fileutils'
 
 module Evm
-  def self.root
-    Pathname.new(__FILE__).parent.parent.expand_path
-  end
-
-  def self.local
-    Pathname.new('/').join('usr', 'local', 'evm')
-  end
+  ROOT_PATH = File.expand_path('..', File.dirname(__FILE__))
+  LOCAL_PATH = File.join('/', 'usr', 'local', 'evm')
 
   def self.abort(*args)
     STDERR.puts args.join(' ')

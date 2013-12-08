@@ -9,7 +9,7 @@ module Evm
     end
 
     def download(path, &block)
-      return if path.exist?
+      return if File.exist?(path)
 
       file = File.open(path, 'w')
 

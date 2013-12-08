@@ -5,15 +5,15 @@ module Evm
     end
 
     def exist?
-      @path.exist?
+      File.exist?(@path)
     end
 
     def clone(url)
-      git 'clone', url, @path.to_s
+      git 'clone', url, @path
     end
 
     def pull
-      Dir.chdir(@path.to_s) do
+      Dir.chdir(@path) do
         git 'pull'
       end
     end
