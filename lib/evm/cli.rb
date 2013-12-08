@@ -25,7 +25,7 @@ module Evm
 
       begin
         const.new(argument, options)
-      rescue => exception
+      rescue Evm::Exception => exception
         Evm.abort exception.message
       end
     end

@@ -62,11 +62,9 @@ describe Evm::Cli do
       raise 'BooM'
     end
 
-    STDERR.should_receive(:puts).with('BooM')
-
     expect {
       Evm::Cli.parse(['foo'])
-    }.to raise_error(SystemExit)
+    }.to raise_error(RuntimeError)
 
   end
 
