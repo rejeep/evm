@@ -210,5 +210,22 @@ describe Evm::Builder do
         @dsl.copy 'from', 'to'
       end
     end
+
+    describe '#run_command' do
+      it 'should not change dir with pathname' do
+        @dsl.stub(:build_path) do
+          Pathname.new('/some/path')
+        end
+
+        Dir.should_receive(:chdir).with('/some/path')
+
+        system = double('system')
+        system.stub(:run)
+
+        Evm::System.stub(:new).and_return(system)
+
+        @dsl.send(:run_command, ['foo', ['bar', 'baz']])
+      end
+    end
   end
 end

@@ -96,7 +96,7 @@ module Evm
       end
 
       def run_command(command, *args)
-        Dir.chdir(build_path) do
+        Dir.chdir(build_path.to_s) do
           system = Evm::System.new(command)
           system.run(*args)
         end
