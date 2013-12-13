@@ -1,11 +1,3 @@
-#!/usr/bin/env ruby
+#!/bin/sh
 
-$: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
-
-require 'evm'
-
-if current = Evm::Package.current
-  exec current.bin, *ARGV
-else
-  abort 'EVM: No Emacs selected. Select one using "evm use".'
-end
+"$(dirname $0)/evm-emacs" "$@"
