@@ -25,14 +25,32 @@ describe Evm::Package do
   end
 
   describe '#installed?' do
-    it 'should be installed if path exists' do
-      File.stub(:exist?).and_return(true)
+    before do
+      @binary = '/usr/local/evm/foo/bin/emacs'
+    end
+
+    it 'should be installed if binary exists' do
+      @foo.stub(:bin).and_return(@binary)
+
+      File.should_receive(:file?).with(@binary).and_return(true)
+      File.should_receive(:executable?).with(@binary).and_return(true)
 
       @foo.should be_installed
     end
 
-    it 'should not be installed if path does not exist' do
-      File.stub(:exist?).and_return(false)
+    it 'should not be installed if binary does not exist' do
+      @foo.stub(:bin).and_return(@binary)
+
+      File.should_receive(:file?).with(@binary).and_return(false)
+
+      @foo.should_not be_installed
+    end
+
+    it 'should not be installed if binary exists, but is not binary' do
+      @foo.stub(:bin).and_return(@binary)
+
+      File.should_receive(:file?).with(@binary).and_return(true)
+      File.should_receive(:executable?).with(@binary).and_return(false)
 
       @foo.should_not be_installed
     end

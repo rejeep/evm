@@ -11,7 +11,7 @@ module Evm
     end
 
     def installed?
-      File.exist?(path)
+      File.file?(bin) && File.executable?(bin)
     end
 
     def bin
