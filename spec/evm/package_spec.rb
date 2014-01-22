@@ -90,16 +90,8 @@ describe Evm::Package do
   end
 
   describe '#use!' do
-    it 'should write name to current file' do
-      current_file = double('current_file')
-
-      file = double('file')
-      file.should_receive(:write).with('foo')
-
-      File.should_receive(:open).with(current_file, 'w').and_yield(file)
-
-      Evm::Package.stub(:current_file).and_return(current_file)
-
+    it 'should link binary to current package' do
+      FileUtils.should_receive(:ln_sf).with(@foo.bin, Evm::BIN_PATH)
       @foo.use!
     end
   end
@@ -167,16 +159,16 @@ describe Evm::Package do
       @foo.uninstall!
     end
 
-    it 'should remove current file if current' do
-      File.should_receive(:delete).and_return('/usr/local/evm/current')
+    it 'should remove binary symlink if current' do
+      FileUtils.should_receive(:rm).with(Evm::BIN_PATH)
 
       @foo.stub(:current?).and_return(true)
 
       @foo.uninstall!
     end
 
-    it 'should not remove current file if no current' do
-      File.should_not_receive(:delete)
+    it 'should not remove binary symlink file if not current' do
+      FileUtils.should_not_receive(:rm).with(Evm::BIN_PATH)
 
       @foo.stub(:current?).and_return(false)
 
@@ -190,23 +182,17 @@ describe Evm::Package do
     end
   end
 
-  describe '.current_file' do
-    it 'should be path to current file' do
-      Evm::Package.current_file.should == '/usr/local/evm/current'
-    end
-  end
-
   describe '.current' do
     it 'should find current' do
-      File.stub(:exist?).with('/usr/local/evm/current').and_return(true)
-      File.stub(:read).and_return('foo')
+      File.stub(:symlink?).with(Evm::BIN_PATH).and_return(true)
+      File.stub(:readlink).and_return('/usr/local/evm/foo/path/to/something')
 
       Evm::Package.should_receive(:find).with('foo')
       Evm::Package.current
     end
 
-    it 'should be nil if no current file' do
-      File.stub(:exist?).and_return(false)
+    it 'should be nil if no binary symlink exists' do
+      File.stub(:symlink?).and_return(false)
 
       Evm::Package.current.should be_nil
     end

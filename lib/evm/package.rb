@@ -23,9 +23,7 @@ module Evm
     end
 
     def use!
-      File.open(Package.current_file, 'w') do |file|
-        file.write(@name)
-      end
+      FileUtils.ln_sf(bin, Evm::BIN_PATH)
     end
 
     def install!
@@ -46,7 +44,7 @@ module Evm
       end
 
       if current?
-        File.delete(Package.current_file)
+        FileUtils.rm(Evm::BIN_PATH)
       end
     end
 
@@ -67,13 +65,12 @@ module Evm
     end
 
     class << self
-      def current_file
-        File.join(Evm::LOCAL_PATH, 'current')
-      end
-
       def current
-        if File.exist?(current_file)
-          find File.read(current_file)
+        if File.symlink?(Evm::BIN_PATH)
+          current_bin_path = File.readlink(Evm::BIN_PATH)
+          if (match = Regexp.new("#{Evm::LOCAL_PATH}/?(?<current>[^/]+)/.+").match(File.readlink(Evm::BIN_PATH)))
+            find match[:current]
+          end
         end
       end
 

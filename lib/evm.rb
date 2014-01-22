@@ -3,6 +3,7 @@ require 'fileutils'
 module Evm
   ROOT_PATH = File.expand_path('..', File.dirname(__FILE__))
   LOCAL_PATH = File.join('/', 'usr', 'local', 'evm')
+  BIN_PATH = File.join(ROOT_PATH, 'bin', 'emacs')
 
   def self.abort(*args)
     STDERR.puts args.join(' ')
