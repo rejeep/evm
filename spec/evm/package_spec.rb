@@ -90,8 +90,23 @@ describe Evm::Package do
   end
 
   describe '#use!' do
-    it 'should link binary to current package' do
-      FileUtils.should_receive(:ln_sf).with(@foo.bin, Evm::BIN_PATH)
+    it 'should link evm-emacs to current package' do
+      FileUtils.stub(:ln_sf)
+      FileUtils.should_receive(:ln_sf).with(@foo.bin, Evm::EVM_EMACS_PATH)
+      @foo.use!
+    end
+
+    it "should link emacs to evm-emacs if it doesn't exist" do
+      FileUtils.stub(:ln_sf)
+      File.stub(:symlink?).with(Evm::EMACS_PATH).and_return(false)
+      FileUtils.should_receive(:ln_sf).with(Evm::EVM_EMACS_PATH, Evm::EMACS_PATH)
+      @foo.use!
+    end
+
+    it "shouldn't link emacs to evm-emacs if it exist" do
+      FileUtils.stub(:ln_sf)
+      File.stub(:symlink?).with(Evm::EMACS_PATH).and_return(true)
+      FileUtils.should_not_receive(:ln_sf).with(Evm::EVM_EMACS_PATH, Evm::EMACS_PATH)
       @foo.use!
     end
   end
@@ -160,7 +175,7 @@ describe Evm::Package do
     end
 
     it 'should remove binary symlink if current' do
-      FileUtils.should_receive(:rm).with(Evm::BIN_PATH)
+      FileUtils.should_receive(:rm).with(Evm::EVM_EMACS_PATH)
 
       @foo.stub(:current?).and_return(true)
 
@@ -168,7 +183,7 @@ describe Evm::Package do
     end
 
     it 'should not remove binary symlink file if not current' do
-      FileUtils.should_not_receive(:rm).with(Evm::BIN_PATH)
+      FileUtils.should_not_receive(:rm).with(Evm::EVM_EMACS_PATH)
 
       @foo.stub(:current?).and_return(false)
 
@@ -184,7 +199,7 @@ describe Evm::Package do
 
   describe '.current' do
     it 'should find current' do
-      File.stub(:symlink?).with(Evm::BIN_PATH).and_return(true)
+      File.stub(:symlink?).with(Evm::EVM_EMACS_PATH).and_return(true)
       File.stub(:readlink).and_return('/usr/local/evm/foo/path/to/something')
 
       Evm::Package.should_receive(:find).with('foo')

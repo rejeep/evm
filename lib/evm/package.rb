@@ -23,7 +23,10 @@ module Evm
     end
 
     def use!
-      FileUtils.ln_sf(bin, Evm::BIN_PATH)
+      FileUtils.ln_sf(bin, Evm::EVM_EMACS_PATH)
+      unless File.symlink?(Evm::EMACS_PATH)
+        FileUtils.ln_sf(Evm::EVM_EMACS_PATH, Evm::EMACS_PATH)
+      end
     end
 
     def install!
@@ -44,7 +47,7 @@ module Evm
       end
 
       if current?
-        FileUtils.rm(Evm::BIN_PATH)
+        FileUtils.rm(Evm::EVM_EMACS_PATH)
       end
     end
 
@@ -66,9 +69,9 @@ module Evm
 
     class << self
       def current
-        if File.symlink?(Evm::BIN_PATH)
-          current_bin_path = File.readlink(Evm::BIN_PATH)
-          if (match = Regexp.new("#{Evm::LOCAL_PATH}/?(?<current>[^/]+)/.+").match(File.readlink(Evm::BIN_PATH)))
+        if File.symlink?(Evm::EVM_EMACS_PATH)
+          current_bin_path = File.readlink(Evm::EVM_EMACS_PATH)
+          if (match = Regexp.new("#{Evm::LOCAL_PATH}/?(?<current>[^/]+)/.+").match(current_bin_path))
             find match[:current]
           end
         end
