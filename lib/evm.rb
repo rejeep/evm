@@ -22,6 +22,7 @@ COMMANDS:
  bin [name]                 Show path to Emacs binary for package name
  list                       List all available packages
  use <name>                 Select name as current package
+ help                       Display this help message
 
 OPTIONS:
  --force                    Force install even when already installed
