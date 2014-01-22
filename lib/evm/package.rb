@@ -23,8 +23,9 @@ module Evm
     end
 
     def use!
-      File.open(Package.current_file, 'w') do |file|
-        file.write(@name)
+      FileUtils.ln_sf(bin, Evm::EVM_EMACS_PATH)
+      unless File.symlink?(Evm::EMACS_PATH)
+        FileUtils.ln_sf(Evm::EVM_EMACS_PATH, Evm::EMACS_PATH)
       end
     end
 
@@ -46,7 +47,7 @@ module Evm
       end
 
       if current?
-        File.delete(Package.current_file)
+        FileUtils.rm(Evm::EVM_EMACS_PATH)
       end
     end
 
@@ -67,13 +68,12 @@ module Evm
     end
 
     class << self
-      def current_file
-        File.join(Evm::LOCAL_PATH, 'current')
-      end
-
       def current
-        if File.exist?(current_file)
-          find File.read(current_file)
+        if File.symlink?(Evm::EVM_EMACS_PATH)
+          current_bin_path = File.readlink(Evm::EVM_EMACS_PATH)
+          if (match = Regexp.new("#{Evm::LOCAL_PATH}/?(?<current>[^/]+)/.+").match(current_bin_path))
+            find match[:current]
+          end
         end
       end
 
