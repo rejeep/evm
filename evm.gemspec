@@ -36,5 +36,4 @@ Gem::Specification.new do |s|
   ]
   s.homepage    = 'http://github.com/rejeep/evm'
   s.license     = 'MIT'
-  s.executables = ['evm', 'emacs']
 end
