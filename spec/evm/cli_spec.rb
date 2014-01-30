@@ -68,6 +68,14 @@ describe Evm::Cli do
 
   end
 
+  it 'should print usage and die if no command given' do
+    Evm.should_receive(:print_usage_and_exit)
+
+    expect {
+      Evm::Cli.parse([])
+    }.to raise_error(SystemExit)
+  end
+
   it 'should print message and exit if command not found' do
     STDERR.should_receive(:puts).with('No such command: bar')
 

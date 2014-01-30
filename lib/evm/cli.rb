@@ -11,11 +11,11 @@ module Evm
         options[:use] = !!argv.delete('--use')
       end
 
-      if argv.include?('--help') || argv.include?('-h')
+      command, argument = argv
+
+      if argv.include?('--help') || argv.include?('-h') || command.nil?
         Evm.print_usage_and_exit
       end
-
-      command, argument = argv
 
       begin
         const = Evm::Command.const_get(command.capitalize)
