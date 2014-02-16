@@ -7,6 +7,10 @@ module Evm
         options[:force] = !!argv.delete('--force')
       end
 
+      if argv.include?('--skip')
+        options[:skip] = !!argv.delete('--skip')
+      end
+
       if argv.include?('--use')
         options[:use] = !!argv.delete('--use')
       end

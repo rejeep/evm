@@ -37,6 +37,12 @@ describe Evm::Cli do
     Evm::Cli.parse(['foo', 'bar', '--use'])
   end
 
+  it 'should support skip option' do
+    @foo.should_receive(:new).with('bar', :skip => true)
+
+    Evm::Cli.parse(['foo', 'bar', '--skip'])
+  end
+
   it 'should print usage and die if option --help/-h' do
     @foo.stub(:new)
 
