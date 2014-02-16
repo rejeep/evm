@@ -8,13 +8,15 @@ module Evm
 
         package = Evm::Package.find(package_name)
 
-        if options[:force]
-          package.uninstall!
-        end
-
-        if package.installed?
-          raise Evm::Exception.new("Already installed #{package_name}")
+        if package.installed? && (!options[:force] || options[:skip])
+          unless options[:skip]
+            raise Evm::Exception.new("Already installed #{package_name}")
+          end
         else
+          if options[:force]
+            package.uninstall!
+          end
+
           package.install!
 
           if options[:use]
