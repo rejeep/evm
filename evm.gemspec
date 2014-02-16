@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'evm'
-  s.version     = '0.4.1'
+  s.version     = '0.5.0'
   s.summary     = 'Emacs Version Manager'
   s.description = 'EVM is a command-line tool that allows you to install multiple Emacs versions.'
   s.authors     = ['Johan Andersson']
