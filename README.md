@@ -38,7 +38,7 @@ No matter what installation approach you choose, create
 
 ```sh
 $ sudo mkdir /usr/local/evm
-$ sudo chown $USER:$USER /usr/local/evm
+$ sudo chown $USER: /usr/local/evm
 ```
 
 ### Automatic
