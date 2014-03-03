@@ -9,6 +9,7 @@ recipe 'emacs-24.2' do
 
   linux do
     option '--prefix', installation_path
+    option '--without-gif'
   end
 
   install do
