@@ -12,6 +12,7 @@ recipe 'emacs-23.4' do
 
     option '--prefix', installation_path
     option "--with-crt-dir=#{crt_dir}"
+    option '--without-gif'
   end
 
   install do

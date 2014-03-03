@@ -9,6 +9,7 @@ recipe 'emacs-git-snapshot' do
 
   linux do
     option '--prefix', installation_path
+    option '--without-gif'
   end
 
   install do
