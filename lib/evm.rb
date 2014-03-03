@@ -5,6 +5,8 @@ module Evm
   LOCAL_PATH = File.join('/', 'usr', 'local', 'evm')
   EMACS_PATH = File.join(ROOT_PATH, 'bin', 'emacs')
   EVM_EMACS_PATH = File.join(ROOT_PATH, 'bin', 'evm-emacs')
+  EMACSCLIENT_PATH = File.join(ROOT_PATH, 'bin', 'emacs')
+  EVM_EMACSCLIENT_PATH = File.join(ROOT_PATH, 'bin', 'evm-emacs')
 
   def self.abort(*args)
     STDERR.puts args.join(' ')

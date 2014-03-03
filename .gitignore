@@ -1,3 +1,5 @@
 /evm-*.gem
 /bin/emacs
 /bin/evm-emacs
+/bin/emacsclient
+/bin/evm-emacsclient

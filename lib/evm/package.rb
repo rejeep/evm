@@ -22,11 +22,21 @@ module Evm
       end
     end
 
+    def client_bin
+      Evm::Os.osx? ? nil : File.join(path, 'bin', 'emacsclient')
+    end
+
     def use!
-      FileUtils.ln_sf(bin, Evm::EVM_EMACS_PATH)
-      unless File.symlink?(Evm::EMACS_PATH)
-        FileUtils.ln_sf(Evm::EVM_EMACS_PATH, Evm::EMACS_PATH)
-      end
+      create_symlinks(bin, "EMACS")
+      create_symlinks(client_bin, "EMACSCLIENT") unless Evm::Os.osx?
+    end
+
+    def create_symlinks(binary_path, type)
+      evm_path = Evm.const_get("EVM_#{type}_PATH")
+      path     = Evm.const_get("#{type}_PATH")
+
+      FileUtils.ln_sf(binary_path, evm_path)
+      FileUtils.ln_sf(evm_path, path) unless File.symlink?(path)
     end
 
     def install!
