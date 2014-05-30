@@ -28,6 +28,7 @@ COMMANDS:
 
 OPTIONS:
  --force                    Force install even when already installed
+ --use                      Select as current package after installing
  --skip                     Ignore if already installed
  --help, -h                 Display this help message
     EOS
