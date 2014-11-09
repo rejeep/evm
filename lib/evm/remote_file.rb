@@ -1,6 +1,7 @@
 require 'uri'
 require 'thread'
 require 'net/http'
+require 'openssl'
 
 module Evm
   class RemoteFile
@@ -44,6 +45,10 @@ module Evm
       uri = URI.parse(url)
 
       http = Net::HTTP.new(uri.host, uri.port)
+      if uri.scheme == 'https'
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
       http.request_get(uri.path) do |response|
         case response
         when Net::HTTPSuccess
