@@ -32,8 +32,10 @@ module Evm
         end
         progress_bar.done
 
+        FileUtils.mkdir(build_path)
+
         tar_file = Evm::TarFile.new(tar_file_path)
-        tar_file.extract(builds_path)
+        tar_file.extract(builds_path, @name)
       end
 
       def osx(&block)

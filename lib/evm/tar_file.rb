@@ -4,8 +4,21 @@ module Evm
       @tar_file = tar_file
     end
 
-    def extract(extract_to)
-      tar '-xzf', @tar_file, '-C', extract_to
+    def extract(extract_to, name = nil)
+      args = []
+      args << '-xzf'
+      args << @tar_file
+      args << '-C'
+
+      if name
+        args << File.join(extract_to, name)
+        args << '--strip-components'
+        args << '1'
+      else
+        args << extract_to
+      end
+
+      tar(*args)
     end
 
     private
