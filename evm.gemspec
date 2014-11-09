@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'evm'
-  s.version     = '0.5.0'
+  s.version     = '0.6.0'
   s.summary     = 'Emacs Version Manager'
   s.description = 'EVM is a command-line tool that allows you to install multiple Emacs versions.'
   s.authors     = ['Johan Andersson']
@@ -32,6 +32,8 @@ Gem::Specification.new do |s|
     'recipes/emacs-24.2.rb',
     'recipes/emacs-24.3-bin.rb',
     'recipes/emacs-24.3.rb',
+    'recipes/emacs-24.4-bin.rb',
+    'recipes/emacs-24.4.rb',
     'recipes/emacs-git-snapshot.rb'
   ]
   s.homepage    = 'http://github.com/rejeep/evm'
