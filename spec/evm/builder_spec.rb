@@ -25,9 +25,11 @@ describe Evm::Builder do
         Evm::RemoteFile.should_receive(:new).with(@tar_gz_url).and_return(remote_file)
 
         tar_file = double('tar_file')
-        tar_file.should_receive(:extract).with('/usr/local/evm/tmp')
+        tar_file.should_receive(:extract).with('/usr/local/evm/tmp', 'name')
 
         Evm::TarFile.should_receive(:new).with(tar_file_path).and_return(tar_file)
+
+        FileUtils.should_receive(:mkdir).with('/usr/local/evm/tmp/name')
 
         @dsl.recipe 'name' do
           @dsl.tar_gz(@tar_gz_url)
