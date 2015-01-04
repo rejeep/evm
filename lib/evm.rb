@@ -30,8 +30,14 @@ OPTIONS:
  --force                    Force install even when already installed
  --use                      Select as current package after installing
  --skip                     Ignore if already installed
+ --version, -v              Display the version
  --help, -h                 Display this help message
     EOS
+  end
+
+  def self.print_version_and_exit
+    STDOUT.puts "0.6.0"
+    exit 0
   end
 end
 
