@@ -26,4 +26,6 @@ env:
   - EVM_EMACS=emacs-24.3
   - EVM_EMACS=emacs-24.4-bin
   - EVM_EMACS=emacs-24.4
+  - EVM_EMACS=emacs-24.5-bin
+  - EVM_EMACS=emacs-24.5
   - EVM_EMACS=emacs-git-snapshot
