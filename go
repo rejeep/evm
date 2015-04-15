@@ -7,7 +7,7 @@ if [[ -d $EVM_DIR ]]; then
 
   exit 1
 else
-  git clone -b ${1:-master} https://github.com/rejeep/evm.git $EVM_DIR &> /dev/null
+  git clone -b ${1:-master} https://github.com/rejeep/evm.git $EVM_DIR
 
   echo "Successfully installed EVM! Now, add the evm binary to your PATH."
   echo '  export PATH="'${EVM_DIR}'/bin:$PATH"'
