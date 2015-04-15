@@ -179,3 +179,68 @@ $ rspec spec
 
 If all passes, send us a
 [pull request](https://github.com/rejeep/evm/pulls) with the changes.
+
+### Adding a new Emacs version
+
+Copy an existing recipe in the [recipes](/recipes) directory and make
+modifications for the new version.  Also add the new version to the
+[Travis configuration](/.travis.yml).
+
+### Adding precompiled binary
+
+If you want to contribute a precompiled binary, these instructions will help.
+
+#### Linux
+
+* Install [Vagrant](https://www.vagrantup.com/)
+
+* Install Vagrant SCP (https://github.com/invernizzi/vagrant-scp)
+
+* Clone https://github.com/travis-ci/travis-cookbooks
+
+* Enter `travis-cookbooks` and run `vagrant up`
+
+* SSH into the VM: `$ vagrant ssh ID`
+
+* Install necessary tools
+
+```bash
+$ sudo apt-get install libncurses-dev
+$ sudo apt-get install autoconf
+$ sudo apt-get install automake
+$ sudo apt-get install git
+```
+
+* Download Emacs source
+
+```bash
+$ wget http://ftpmirror.gnu.org/emacs/emacs-MAJOR.MINOR.tar.gz
+```
+
+* Unzip it
+
+```bash
+$ tar -xvzf emacs-MAJOR-MINOR.tar.gz
+```
+
+* Compile and Install Emacs
+
+```bash
+$ ./configure --without-all --prefix=/usr/local/evm/emacs-MAJOR.MINOR-bin
+$ make bootstrap
+$ make install
+```
+
+* Tar it
+
+```bash
+$ tar -cvzf emacs-MAJOR-MINOR-linux.tar.gz /usr/local/evm/emacs-MAJOR.MINOR-bin
+```
+
+* Copy from VM
+
+```bash
+$ vagrant scp ID:/usr/local/evm/emacs-MAJOR.MINOR-linux.tar.gz .
+```
+
+* Add zip file to [evm-bin](https://github.com/rejeep/evm-bin) and send a pull request
