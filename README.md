@@ -50,7 +50,7 @@ $ curl -fsSkL https://raw.github.com/rejeep/evm/master/go | bash
 Add EVM's `bin` directory to your `PATH`.
 
 ```sh
-$ export PATH="~/.evm/bin:$PATH"
+$ export PATH="$HOME/.evm/bin:$PATH"
 ```
 
 ### Homebrew
@@ -76,7 +76,7 @@ $ git clone https://github.com/rejeep/evm.git ~/.evm
 Add EVM's `bin` directory to your `PATH`.
 
 ```sh
-$ export PATH="~/.evm/bin:$PATH"
+$ export PATH="$HOME/.evm/bin:$PATH"
 ```
 
 ## Usage
