@@ -21,6 +21,10 @@ module Evm
         Evm.print_usage_and_exit
       end
 
+      if argv.include?('--version') || argv.include?('-v')
+        Evm.print_version_and_exit
+      end
+
       begin
         const = Evm::Command.const_get(command.capitalize)
       rescue NameError => exception
