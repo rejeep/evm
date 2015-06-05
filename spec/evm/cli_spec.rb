@@ -90,3 +90,38 @@ describe Evm::Cli do
     }.to raise_error(SystemExit)
   end
 end
+
+require 'fakefs/spec_helpers'
+
+describe "EVM::Cli file system operations" do
+  # These tests go in a separate describe block so that FakeFS doesn't
+  # affect other tests.
+  include FakeFS::SpecHelpers
+
+  before do
+    @foo = double('Foo')
+
+    stub_const('Evm::Command::Foo', @foo)
+  end
+
+  it 'should give an error if install directory does not exist' do
+    STDERR.should_receive(:puts).with(/does not exist/)
+
+    expect {
+      Evm::Cli.parse(['foo'])
+    }.to raise_error(SystemExit)
+  end
+
+  # Disabled: Waiting for fix to bug #308 in fakefs (writable? is not
+  # mocked correctly).
+  xit 'should give an error if install directory is not writable' do
+
+    FileUtils.mkdir_p '/usr/local/evm', mode: 0000
+    STDERR.should_receive(:puts).with(/can't write to/)
+
+    expect {
+      Evm::Cli.parse(['foo'])
+    }.to raise_error(SystemExit)
+  end
+
+end
