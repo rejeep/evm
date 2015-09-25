@@ -198,13 +198,14 @@ If you want to contribute a precompiled binary, these instructions will help.
 
 * Clone https://github.com/travis-ci/travis-cookbooks
 
-* Enter `travis-cookbooks` and run `vagrant up`
+* Enter `travis-cookbooks` and run `vagrant init hashicorp/precise64` then `vagrant up`
 
 * SSH into the VM: `$ vagrant ssh ID`
 
 * Install necessary tools
 
 ```bash
+$ sudo apt-get install build-essential
 $ sudo apt-get install libncurses-dev
 $ sudo apt-get install autoconf
 $ sudo apt-get install automake
@@ -234,7 +235,8 @@ $ make install
 * Tar it
 
 ```bash
-$ tar -cvzf emacs-MAJOR-MINOR-linux.tar.gz /usr/local/evm/emacs-MAJOR.MINOR-bin
+$ cd /usr/local/evm
+$ tar -cvzf emacs-MAJOR-MINOR-linux.tar.gz emacs-MAJOR.MINOR-bin
 ```
 
 * Copy from VM
