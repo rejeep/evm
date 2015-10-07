@@ -22,7 +22,28 @@ module Evm
       end
     end
 
+    def extra_binaries
+      bin_path = if Evm::Os.osx?
+        File.join(path, 'Emacs.app', 'Contents', 'MacOS', 'bin')
+      else
+        File.join(path, 'bin')
+      end
+
+      Dir.glob(File.join(bin_path, "*"))
+    end
+
+    def clear_bin_dir
+      current = Dir.glob(File.join(Evm::EMACS_BIN_PATH, '*')).reject do |bin_path|
+        File.basename(bin_path) == "evm"
+      end
+
+      FileUtils.rm_f(current)
+    end
+
     def use!
+      clear_bin_dir
+
+      FileUtils.ln_sf(extra_binaries, Evm::EMACS_BIN_PATH)
       FileUtils.ln_sf(bin, Evm::EVM_EMACS_PATH)
       unless File.symlink?(Evm::EMACS_PATH)
         FileUtils.ln_sf(Evm::EVM_EMACS_PATH, Evm::EMACS_PATH)
