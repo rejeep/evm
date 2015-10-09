@@ -186,11 +186,9 @@ Copy an existing recipe in the [recipes](/recipes) directory and make
 modifications for the new version.  Also add the new version to the
 [Travis configuration](/.travis.yml).
 
-### Adding precompiled binary
+### Adding Travis binary
 
-If you want to contribute a precompiled binary, these instructions will help.
-
-#### Linux
+If you want to contribute a Travis binary, these instructions will help.
 
 * Install [Vagrant](https://www.vagrantup.com/)
 
@@ -227,7 +225,7 @@ $ tar -xvzf emacs-MAJOR-MINOR.tar.gz
 * Compile and Install Emacs
 
 ```bash
-$ ./configure --without-all --prefix=/usr/local/evm/emacs-MAJOR.MINOR-bin
+$ ./configure --without-all --prefix=/tmp/emacs-MAJOR.MINOR-bin
 $ make bootstrap
 $ make install
 ```
@@ -235,14 +233,16 @@ $ make install
 * Tar it
 
 ```bash
-$ cd /usr/local/evm
-$ tar -cvzf emacs-MAJOR-MINOR-linux.tar.gz emacs-MAJOR.MINOR-bin
+$ cd /tmp
+$ tar -cvzf emacs-MAJOR-MINOR-travis.tar.gz emacs-MAJOR.MINOR-travis
 ```
 
 * Copy from VM
 
 ```bash
-$ vagrant scp ID:/usr/local/evm/emacs-MAJOR.MINOR-linux.tar.gz .
+$ vagrant scp ID:/usr/local/evm/emacs-MAJOR.MINOR-travis.tar.gz .
 ```
 
-* Add zip file to [evm-bin](https://github.com/rejeep/evm-bin) and send a pull request
+* Create a new recipe and make a pull request.
+
+* Ask maintainer to add a new release and add the binary.
