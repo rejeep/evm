@@ -5,13 +5,13 @@ describe Evm::Os do
     it 'should be osx when osx' do
       stub_const('RUBY_PLATFORM', 'x86_64-darwin12.3.0')
 
-      Evm::Os.osx?.should be_true
+      expect(Evm::Os.osx?).to be_truthy
     end
 
     it 'should not be osx when linux' do
       stub_const('RUBY_PLATFORM', 'x86_64-linux')
 
-      Evm::Os.osx?.should be_false
+      expect(Evm::Os.osx?).to be_falsy
     end
   end
 
@@ -19,13 +19,13 @@ describe Evm::Os do
     it 'should be linux when linux' do
       stub_const('RUBY_PLATFORM', 'x86_64-linux')
 
-      Evm::Os.linux?.should be_true
+      expect(Evm::Os.linux?).to be_truthy
     end
 
     it 'should not be linux when osx' do
       stub_const('RUBY_PLATFORM', 'x86_64-darwin12.3.0')
 
-      Evm::Os.linux?.should be_false
+      expect(Evm::Os.linux?).to be_falsy
     end
   end
 
