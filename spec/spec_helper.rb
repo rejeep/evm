@@ -1,8 +1,6 @@
 require 'rubygems'
 require 'bundler/setup'
 
-require 'webmock/rspec'
-
 require 'evm'
 
 RSpec.configure do |config|
