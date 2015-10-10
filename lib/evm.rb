@@ -1,6 +1,8 @@
 require 'fileutils'
 
 module Evm
+  class Exception < StandardError; end
+
   ROOT_PATH = File.expand_path('..', File.dirname(__FILE__))
   LOCAL_PATH = File.join('/', 'usr', 'local', 'evm')
   EMACS_PATH = File.join(ROOT_PATH, 'bin', 'emacs')
