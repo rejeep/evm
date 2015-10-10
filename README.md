@@ -1,5 +1,15 @@
 # Emacs Version Manager
 
+## Deprecation Warning!
+
+As Travis is moving towards a container-based infrastructure, hence
+sudo is not possible, EVM added support for Travis specific binaries
+(ends with `-travis`), which will be installed in `/tmp`.
+
+All `-bin` versions will are deprecated and will be removed. Do not use them!
+
+To run EVM on Travis, see https://gist.github.com/rejeep/ebcd57c3af83b049833b
+
 ## Why EVM?
 
 * Did you ever wonder how to install Emacs? Homebrew, apt-get, Emacs
