@@ -6,13 +6,8 @@ describe Evm::Builder do
       @tar_gz_url = 'http://domain.com/foo.tar.gz'
       @git_url = 'git://domain.com/emacs.git'
 
-      progress_bar = double('progress_bar')
-      progress_bar.stub(:set)
-      progress_bar.stub(:done)
-
       @dsl = Evm::Builder::Dsl.new
       @dsl.stub(:path).and_return('/path/to')
-      @dsl.stub(:progress_bar).and_return(progress_bar)
     end
 
     describe '#tar_gz' do
