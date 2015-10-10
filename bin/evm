@@ -4,4 +4,8 @@ $: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'evm'
 
-Evm::Cli.parse(ARGV)
+begin
+  Evm::Cli.parse(ARGV)
+rescue Evm::Exception => e
+  STDERR.puts e.message
+end
