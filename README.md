@@ -209,6 +209,7 @@ $ sudo apt-get install libncurses-dev
 $ sudo apt-get install autoconf
 $ sudo apt-get install automake
 $ sudo apt-get install git
+$ sudo apt-get install texinfo
 ```
 
 * Download Emacs source
