@@ -104,14 +104,12 @@ emacs-23.4
 emacs-24.1 [I]
 emacs-24.2
 * emacs-24.3 [I]
-emacs-24.3-bin [I]
+emacs-24.3-travis [I]
 ...
 ```
 
 The `[I]` shows what versions are currently installed and the `*`
 shows what version is currently selected.
-
-_NOTE: The versions with the `-bin` suffix should only to be used for testing._
 
 ### install <name>
 
@@ -228,7 +226,7 @@ $ tar -xvzf emacs-MAJOR-MINOR.tar.gz
 * Compile and Install Emacs
 
 ```bash
-$ ./configure --without-all --prefix=/tmp/emacs-MAJOR.MINOR-bin
+$ ./configure --without-all --prefix=/tmp/emacs-MAJOR.MINOR-travis
 $ make bootstrap
 $ make install
 ```
