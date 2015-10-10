@@ -60,18 +60,18 @@ module Evm
     end
 
     def path
-      File.join(Evm::LOCAL_PATH, @name)
+      File.join(Evm.config[:path], @name)
     end
 
     def tmp_path
-      File.join(Evm::LOCAL_PATH, 'tmp')
+      File.join(Evm.config[:path], 'tmp')
     end
 
     class << self
       def current
         if File.symlink?(Evm::EVM_EMACS_PATH)
           current_bin_path = File.readlink(Evm::EVM_EMACS_PATH)
-          if (match = Regexp.new("#{Evm::LOCAL_PATH}/?(?<current>[^/]+)/.+").match(current_bin_path))
+          if (match = Regexp.new("#{Evm.config[:path]}/?(?<current>[^/]+)/.+").match(current_bin_path))
             find match[:current]
           end
         end

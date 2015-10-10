@@ -65,7 +65,7 @@ module Evm
       end
 
       def builds_path
-        File.join(Evm::LOCAL_PATH, 'tmp')
+        File.join(Evm.config[:path], 'tmp')
       end
 
       def build_path
@@ -73,7 +73,7 @@ module Evm
       end
 
       def installations_path
-        Evm::LOCAL_PATH
+        Evm.config[:path]
       end
 
       def installation_path

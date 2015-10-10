@@ -29,12 +29,15 @@ Not supported. Need help from someone running Windows.
 
 ## Installation
 
-EVM installs all Emacs versions under `/usr/local/evm`. This is not
-configurable and that is because EVM provides pre compiled binaries,
-which unfortunately must run in the directory it was compiled for.
+Default installation directory for EVM Emacs versions is
+`/usr/local/evm`. This can be changed with the `config` command:
 
-No matter what installation approach you choose, create
-`/usr/local/evm` and give your user access rights:
+```sh
+$ evm config path /foo/bar
+```
+
+No matter what installation approach you choose, create the
+installation directory and give your user access rights, for example:
 
 ```sh
 $ sudo mkdir /usr/local/evm

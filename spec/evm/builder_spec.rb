@@ -12,7 +12,7 @@ describe Evm::Builder do
 
     describe '#tar_gz' do
       it 'should download and extract tar' do
-        tar_file_path = '/usr/local/evm/tmp/name.tar.gz'
+        tar_file_path = '/tmp/evm/tmp/name.tar.gz'
 
         remote_file = double('remote_file')
         remote_file.should_receive(:download).with(tar_file_path)
@@ -20,11 +20,11 @@ describe Evm::Builder do
         Evm::RemoteFile.should_receive(:new).with(@tar_gz_url).and_return(remote_file)
 
         tar_file = double('tar_file')
-        tar_file.should_receive(:extract).with('/usr/local/evm/tmp', 'name')
+        tar_file.should_receive(:extract).with('/tmp/evm/tmp', 'name')
 
         Evm::TarFile.should_receive(:new).with(tar_file_path).and_return(tar_file)
 
-        FileUtils.should_receive(:mkdir).with('/usr/local/evm/tmp/name')
+        FileUtils.should_receive(:mkdir).with('/tmp/evm/tmp/name')
 
         @dsl.recipe 'name' do
           @dsl.tar_gz(@tar_gz_url)
@@ -163,7 +163,7 @@ describe Evm::Builder do
     describe '#build_path' do
       it 'should return package build path' do
         @dsl.recipe 'name' do
-          @dsl.build_path.should == '/usr/local/evm/tmp/name'
+          @dsl.build_path.should == '/tmp/evm/tmp/name'
         end
       end
     end
@@ -171,7 +171,7 @@ describe Evm::Builder do
     describe '#builds_path' do
       it 'should return package builds path' do
         @dsl.recipe 'name' do
-          @dsl.builds_path.should == '/usr/local/evm/tmp'
+          @dsl.builds_path.should == '/tmp/evm/tmp'
         end
       end
     end
@@ -179,7 +179,7 @@ describe Evm::Builder do
     describe '#installation_path' do
       it 'should return package installation path' do
         @dsl.recipe 'name' do
-          @dsl.installation_path.should == '/usr/local/evm/name'
+          @dsl.installation_path.should == '/tmp/evm/name'
         end
       end
     end
@@ -187,7 +187,7 @@ describe Evm::Builder do
     describe '#installations_path' do
       it 'should return package installations path' do
         @dsl.recipe 'name' do
-          @dsl.installations_path.should == '/usr/local/evm'
+          @dsl.installations_path.should == '/tmp/evm'
         end
       end
     end
