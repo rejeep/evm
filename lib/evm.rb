@@ -8,32 +8,6 @@ module Evm
   EMACS_PATH = File.join(ROOT_PATH, 'bin', 'emacs')
   EVM_EMACS_PATH = File.join(ROOT_PATH, 'bin', 'evm-emacs')
 
-  def self.abort(*args)
-    STDERR.puts args.join(' ')
-
-    exit 1
-  end
-
-  def self.print_usage_and_exit
-    Evm.abort <<-EOS
-USAGE: evm COMMAND [OPTIONS]
-
-Emacs Version Manager
-
-COMMANDS:
- install <name>             Install package name
- uninstall <name>           Uninstall package name
- bin [name]                 Show path to Emacs binary for package name
- list                       List all available packages
- use <name>                 Select name as current package
- help                       Display this help message
-
-OPTIONS:
- --force                    Force install even when already installed
- --use                      Select as current package after installing
- --skip                     Ignore if already installed
- --help, -h                 Display this help message
-    EOS
   end
 end
 

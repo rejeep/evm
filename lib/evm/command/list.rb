@@ -1,7 +1,7 @@
 module Evm
   module Command
     class List
-      def initialize(*args)
+      def initialize(*)
         packages = Evm::Package.all
         packages.each do |package|
           if package.current?

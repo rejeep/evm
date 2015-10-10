@@ -11,7 +11,7 @@ describe Evm::Command::Install do
 
     STDOUT.should_receive(:puts).with('Successfully installed foo')
 
-    Evm::Command::Install.new('foo')
+    Evm::Command::Install.new(['foo'])
   end
 
   it 'should uninstall first if force option' do
@@ -25,7 +25,7 @@ describe Evm::Command::Install do
 
     STDOUT.should_receive(:puts).with('Successfully installed foo')
 
-    Evm::Command::Install.new('foo', :force => true)
+    Evm::Command::Install.new(['foo'], :force => true)
   end
 
   it 'should install when installed if force' do
@@ -41,7 +41,7 @@ describe Evm::Command::Install do
 
     STDOUT.should_receive(:puts).with('Successfully installed foo')
 
-    Evm::Command::Install.new('foo', :force => true)
+    Evm::Command::Install.new(['foo'], :force => true)
   end
 
   it 'should install and use if --use option' do
@@ -55,7 +55,7 @@ describe Evm::Command::Install do
 
     STDOUT.should_receive(:puts).with('Successfully installed foo')
 
-    Evm::Command::Install.new('foo', :use => true)
+    Evm::Command::Install.new(['foo'], :use => true)
   end
 
   it 'should raise exception if already installed' do
@@ -67,13 +67,13 @@ describe Evm::Command::Install do
     end
 
     expect {
-      Evm::Command::Install.new('foo')
+      Evm::Command::Install.new(['foo'])
     }.to raise_error('Already installed foo')
   end
 
   it 'should raise exception if no package name' do
     expect {
-      Evm::Command::Install.new(nil)
+      Evm::Command::Install.new([nil])
     }.to raise_error('The install command requires an argument')
   end
 
@@ -85,7 +85,7 @@ describe Evm::Command::Install do
       package
     end
 
-    Evm::Command::Install.new('foo', :skip => true)
+    Evm::Command::Install.new(['foo'], :skip => true)
   end
 
   it 'should install if not already installed and --skip option' do
@@ -98,6 +98,6 @@ describe Evm::Command::Install do
 
     STDOUT.should_receive(:puts).with('Successfully installed foo')
 
-    Evm::Command::Install.new('foo', :skip => true)
+    Evm::Command::Install.new(['foo'], :skip => true)
   end
 end
