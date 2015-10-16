@@ -1,8 +1,16 @@
 require 'spec_helper'
 
 describe Evm::Package do
+  let :file_class do
+    double('file_class')
+  end
+
+  let :file_instance do
+    double('file_instance')
+  end
+
   before do
-    @foo = Evm::Package.new('foo')
+    @foo = Evm::Package.new('foo', file: file_class)
     @foo.stub(:name).and_return('foo')
     @foo
   end
@@ -90,23 +98,14 @@ describe Evm::Package do
   end
 
   describe '#use!' do
-    it 'should link evm-emacs to current package' do
-      FileUtils.stub(:ln_sf)
-      FileUtils.should_receive(:ln_sf).with(@foo.bin, Evm::EVM_EMACS_PATH)
-      @foo.use!
-    end
+    it 'creates emacs and evm-emacs shims' do
+      expect(file_class).to receive(:exists?).with(Evm::EMACS_PATH).and_return(false)
+      expect(file_class).to receive(:exists?).with(Evm::EVM_EMACS_PATH).and_return(true)
+      expect(file_class).to receive(:delete).with(Evm::EVM_EMACS_PATH)
+      expect(file_class).to receive(:open).twice.with(anything, 'w').and_yield(file_instance)
+      expect(file_class).to receive(:chmod).twice
+      expect(file_instance).to receive(:puts).twice.with("#!/bin/bash\nexec \"/tmp/evm/foo/bin/emacs\" \"$@\"")
 
-    it "should link emacs to evm-emacs if it doesn't exist" do
-      FileUtils.stub(:ln_sf)
-      File.stub(:symlink?).with(Evm::EMACS_PATH).and_return(false)
-      FileUtils.should_receive(:ln_sf).with(Evm::EVM_EMACS_PATH, Evm::EMACS_PATH)
-      @foo.use!
-    end
-
-    it "shouldn't link emacs to evm-emacs if it exist" do
-      FileUtils.stub(:ln_sf)
-      File.stub(:symlink?).with(Evm::EMACS_PATH).and_return(true)
-      FileUtils.should_not_receive(:ln_sf).with(Evm::EVM_EMACS_PATH, Evm::EMACS_PATH)
       @foo.use!
     end
   end
@@ -198,18 +197,14 @@ describe Evm::Package do
   end
 
   describe '.current' do
-    it 'should find current' do
-      File.stub(:symlink?).with(Evm::EVM_EMACS_PATH).and_return(true)
-      File.stub(:readlink).and_return('/tmp/evm/foo/path/to/something')
-
-      Evm::Package.should_receive(:find).with('foo')
-      Evm::Package.current
+    it 'return package when set in config' do
+      Evm.config[:current] = 'emacs-24.5'
+      expect(Evm::Package.current.name).to eq('emacs-24.5')
     end
 
-    it 'should be nil if no binary symlink exists' do
-      File.stub(:symlink?).and_return(false)
-
-      Evm::Package.current.should be_nil
+    it 'is nil unless set in config' do
+      Evm.config[:current] = nil
+      expect(Evm::Package.current).to be_nil
     end
   end
 
