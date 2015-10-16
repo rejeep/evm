@@ -8,7 +8,7 @@ describe Evm::Command::Bin do
 
     STDOUT.should_receive(:puts).with('BIN')
 
-    Evm::Command::Bin.new()
+    Evm::Command::Bin.new([])
   end
 
   it 'should print specified bin when specified' do
@@ -18,7 +18,7 @@ describe Evm::Command::Bin do
 
     STDOUT.should_receive(:puts).with('BIN')
 
-    Evm::Command::Bin.new('foo')
+    Evm::Command::Bin.new(['foo'])
   end
 
   it 'should raise exception when no current and no specified' do
@@ -26,7 +26,7 @@ describe Evm::Command::Bin do
     Evm::Package.stub(:current)
 
     expect {
-      Evm::Command::Bin.new()
+      Evm::Command::Bin.new([])
     }.to raise_error('No current selected')
   end
 end

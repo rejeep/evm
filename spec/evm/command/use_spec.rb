@@ -9,7 +9,7 @@ describe Evm::Command::Use do
       package
     end
 
-    Evm::Command::Use.new('foo')
+    Evm::Command::Use.new(['foo'])
   end
 
   it 'should raise exception if package is not installed' do
@@ -20,13 +20,13 @@ describe Evm::Command::Use do
     end
 
     expect {
-      Evm::Command::Use.new('foo')
+      Evm::Command::Use.new(['foo'])
     }.to raise_error('Package not installed: foo')
   end
 
   it 'should raise exception if no package name' do
     expect {
-      Evm::Command::Use.new(nil)
+      Evm::Command::Use.new([])
     }.to raise_error('The use command requires an argument')
   end
 end

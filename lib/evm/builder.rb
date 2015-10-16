@@ -27,10 +27,7 @@ module Evm
         tar_file_path = File.join(builds_path, @name + '.tar.gz')
 
         remote_file = Evm::RemoteFile.new(url)
-        remote_file.download(tar_file_path) do |progress|
-          progress_bar.set(progress)
-        end
-        progress_bar.done
+        remote_file.download(tar_file_path)
 
         FileUtils.mkdir(build_path)
 
@@ -68,7 +65,7 @@ module Evm
       end
 
       def builds_path
-        File.join(Evm::LOCAL_PATH, 'tmp')
+        File.join(Evm.config[:path], 'tmp')
       end
 
       def build_path
@@ -76,7 +73,7 @@ module Evm
       end
 
       def installations_path
-        Evm::LOCAL_PATH
+        Evm.config[:path]
       end
 
       def installation_path
@@ -92,10 +89,6 @@ module Evm
       end
 
       private
-
-      def progress_bar
-        @progress_bar ||= Evm::ProgressBar.new
-      end
 
       def run_command(command, *args)
         Dir.chdir(build_path) do

@@ -16,16 +16,8 @@ script:
 rvm:
   - 1.9.3
 env:
-  - EVM_EMACS=emacs-23.4-bin
-  - EVM_EMACS=emacs-23.4
-  - EVM_EMACS=emacs-24.1-bin
-  - EVM_EMACS=emacs-24.1
-  - EVM_EMACS=emacs-24.2-bin
-  - EVM_EMACS=emacs-24.2
-  - EVM_EMACS=emacs-24.3-bin
-  - EVM_EMACS=emacs-24.3
-  - EVM_EMACS=emacs-24.4-bin
-  - EVM_EMACS=emacs-24.4
-  - EVM_EMACS=emacs-24.5-bin
-  - EVM_EMACS=emacs-24.5
-  - EVM_EMACS=emacs-git-snapshot
+  - EVM_EMACS=emacs-24.1-travis
+  - EVM_EMACS=emacs-24.2-travis
+  - EVM_EMACS=emacs-24.3-travis
+  - EVM_EMACS=emacs-24.4-travis
+  - EVM_EMACS=emacs-24.5-travis

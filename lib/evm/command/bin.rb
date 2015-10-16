@@ -1,8 +1,8 @@
 module Evm
   module Command
     class Bin
-      def initialize(package_name = nil, options = {})
-        if package_name
+      def initialize(argv, options = {})
+        if (package_name = argv[0])
           package = Evm::Package.find(package_name)
         else
           package = Evm::Package.current

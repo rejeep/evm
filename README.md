@@ -1,5 +1,15 @@
 # Emacs Version Manager
 
+## Deprecation Warning!
+
+As Travis is moving towards a container-based infrastructure, hence
+sudo is not possible, EVM added support for Travis specific binaries
+(ends with `-travis`), which will be installed in `/tmp`.
+
+All `-bin` versions will are deprecated and will be removed. Do not use them!
+
+To run EVM on Travis, see https://gist.github.com/rejeep/ebcd57c3af83b049833b
+
 ## Why EVM?
 
 * Did you ever wonder how to install Emacs? Homebrew, apt-get, Emacs
@@ -29,12 +39,15 @@ Not supported. Need help from someone running Windows.
 
 ## Installation
 
-EVM installs all Emacs versions under `/usr/local/evm`. This is not
-configurable and that is because EVM provides pre compiled binaries,
-which unfortunately must run in the directory it was compiled for.
+Default installation directory for EVM Emacs versions is
+`/usr/local/evm`. This can be changed with the `config` command:
 
-No matter what installation approach you choose, create
-`/usr/local/evm` and give your user access rights:
+```sh
+$ evm config path /foo/bar
+```
+
+No matter what installation approach you choose, create the
+installation directory and give your user access rights, for example:
 
 ```sh
 $ sudo mkdir /usr/local/evm
@@ -101,14 +114,12 @@ emacs-23.4
 emacs-24.1 [I]
 emacs-24.2
 * emacs-24.3 [I]
-emacs-24.3-bin [I]
+emacs-24.3-travis [I]
 ...
 ```
 
 The `[I]` shows what versions are currently installed and the `*`
 shows what version is currently selected.
-
-_NOTE: The versions with the `-bin` suffix should only to be used for testing._
 
 ### install <name>
 
@@ -186,11 +197,9 @@ Copy an existing recipe in the [recipes](/recipes) directory and make
 modifications for the new version.  Also add the new version to the
 [Travis configuration](/.travis.yml).
 
-### Adding precompiled binary
+### Adding Travis binary
 
-If you want to contribute a precompiled binary, these instructions will help.
-
-#### Linux
+If you want to contribute a Travis binary, these instructions will help.
 
 * Install [Vagrant](https://www.vagrantup.com/)
 
@@ -210,6 +219,7 @@ $ sudo apt-get install libncurses-dev
 $ sudo apt-get install autoconf
 $ sudo apt-get install automake
 $ sudo apt-get install git
+$ sudo apt-get install texinfo
 ```
 
 * Download Emacs source
@@ -227,7 +237,7 @@ $ tar -xvzf emacs-MAJOR-MINOR.tar.gz
 * Compile and Install Emacs
 
 ```bash
-$ ./configure --without-all --prefix=/usr/local/evm/emacs-MAJOR.MINOR-bin
+$ ./configure --without-all --prefix=/tmp/emacs-MAJOR.MINOR-travis
 $ make bootstrap
 $ make install
 ```
@@ -235,14 +245,16 @@ $ make install
 * Tar it
 
 ```bash
-$ cd /usr/local/evm
-$ tar -cvzf emacs-MAJOR-MINOR-linux.tar.gz emacs-MAJOR.MINOR-bin
+$ cd /tmp
+$ tar -cvzf emacs-MAJOR-MINOR-travis.tar.gz emacs-MAJOR.MINOR-travis
 ```
 
 * Copy from VM
 
 ```bash
-$ vagrant scp ID:/usr/local/evm/emacs-MAJOR.MINOR-linux.tar.gz .
+$ vagrant scp ID:/usr/local/evm/emacs-MAJOR.MINOR-travis.tar.gz .
 ```
 
-* Add zip file to [evm-bin](https://github.com/rejeep/evm-bin) and send a pull request
+* Create a new recipe and make a pull request.
+
+* Ask maintainer to add a new release and add the binary.

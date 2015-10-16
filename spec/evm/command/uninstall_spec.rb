@@ -11,7 +11,7 @@ describe Evm::Command::Uninstall do
 
     STDOUT.should_receive(:puts).with('Successfully uninstalled foo')
 
-    Evm::Command::Uninstall.new('foo')
+    Evm::Command::Uninstall.new(['foo'])
   end
 
   it 'should raise exception if not installed' do
@@ -23,13 +23,13 @@ describe Evm::Command::Uninstall do
     end
 
     expect {
-      Evm::Command::Uninstall.new('foo')
+      Evm::Command::Uninstall.new(['foo'])
     }.to raise_error('Not installed foo')
   end
 
   it 'should raise exception if no package name' do
     expect {
-      Evm::Command::Uninstall.new(nil)
+      Evm::Command::Uninstall.new([])
     }.to raise_error('The uninstall command requires an argument')
   end
 end

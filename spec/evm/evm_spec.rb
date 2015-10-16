@@ -5,7 +5,7 @@ describe Evm do
     Evm::ROOT_PATH.should == File.expand_path('../..', File.dirname(__FILE__))
   end
 
-  it 'should return correct evm installation directory' do
+  it 'should return correct local directory' do
     Evm::LOCAL_PATH.should == '/usr/local/evm'
   end
 end

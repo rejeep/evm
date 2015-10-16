@@ -1,7 +1,9 @@
 module Evm
   module Command
     class Use
-      def initialize(package_name, options = {})
+      def initialize(argv, options = {})
+        package_name = argv[0]
+
         unless package_name
           raise Evm::Exception.new('The use command requires an argument')
         end

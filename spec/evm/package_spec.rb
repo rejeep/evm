@@ -26,7 +26,7 @@ describe Evm::Package do
 
   describe '#installed?' do
     before do
-      @binary = '/usr/local/evm/foo/bin/emacs'
+      @binary = '/tmp/evm/foo/bin/emacs'
     end
 
     it 'should be installed if binary exists' do
@@ -58,7 +58,7 @@ describe Evm::Package do
 
   describe '#path' do
     it 'should be path to package path' do
-      @foo.path.should == '/usr/local/evm/foo'
+      @foo.path.should == '/tmp/evm/foo'
     end
   end
 
@@ -67,25 +67,25 @@ describe Evm::Package do
       Evm::Os.stub(:osx?).and_return(false)
       Evm::Os.stub(:linux?).and_return(true)
 
-      @foo.bin.to_s.should == '/usr/local/evm/foo/bin/emacs'
+      @foo.bin.to_s.should == '/tmp/evm/foo/bin/emacs'
     end
 
     it 'should be bin/emacs if osx and no nextstep' do
       Evm::Os.stub(:osx?).and_return(true)
       Evm::Os.stub(:linux?).and_return(false)
 
-      File.stub(:exist?).with('/usr/local/evm/foo/Emacs.app').and_return(false)
+      File.stub(:exist?).with('/tmp/evm/foo/Emacs.app').and_return(false)
 
-      @foo.bin.to_s.should == '/usr/local/evm/foo/bin/emacs'
+      @foo.bin.to_s.should == '/tmp/evm/foo/bin/emacs'
     end
 
     it 'should be nextstep bin if osx and nextstep' do
       Evm::Os.stub(:osx?).and_return(true)
       Evm::Os.stub(:linux?).and_return(false)
 
-      File.stub(:exist?).with('/usr/local/evm/foo/Emacs.app').and_return(true)
+      File.stub(:exist?).with('/tmp/evm/foo/Emacs.app').and_return(true)
 
-      @foo.bin.should == '/usr/local/evm/foo/Emacs.app/Contents/MacOS/Emacs'
+      @foo.bin.should == '/tmp/evm/foo/Emacs.app/Contents/MacOS/Emacs'
     end
   end
 
@@ -116,22 +116,22 @@ describe Evm::Package do
       @builder = double('builder')
       @builder.should_receive(:build!)
 
-      File.stub(:exist?).with('/usr/local/evm/foo').and_return(true)
-      File.stub(:exist?).with('/usr/local/evm/tmp').and_return(true)
+      File.stub(:exist?).with('/tmp/evm/foo').and_return(true)
+      File.stub(:exist?).with('/tmp/evm/tmp').and_return(true)
 
       Evm::Builder.stub(:new).and_return(@builder)
     end
 
     it 'should create installation path if not exist' do
-      File.stub(:exist?).with('/usr/local/evm/foo').and_return(false)
+      File.stub(:exist?).with('/tmp/evm/foo').and_return(false)
 
-      Dir.should_receive(:mkdir).with('/usr/local/evm/foo')
+      Dir.should_receive(:mkdir).with('/tmp/evm/foo')
 
       @foo.install!
     end
 
     it 'should not create installation path if exists' do
-      File.stub(:exist?).with('/usr/local/evm/foo').and_return(true)
+      File.stub(:exist?).with('/tmp/evm/foo').and_return(true)
 
       Dir.should_not_receive(:mkdir)
 
@@ -139,17 +139,17 @@ describe Evm::Package do
     end
 
     it 'should create tmp path if not exist' do
-      File.stub(:exist?).with('/usr/local/evm/tmp').and_return(false)
+      File.stub(:exist?).with('/tmp/evm/tmp').and_return(false)
 
-      Dir.should_receive(:mkdir).with('/usr/local/evm/tmp')
+      Dir.should_receive(:mkdir).with('/tmp/evm/tmp')
 
       @foo.install!
     end
 
     it 'should not create installation path if exists' do
-      File.stub(:exist?).with('/usr/local/evm/tmp').and_return(true)
+      File.stub(:exist?).with('/tmp/evm/tmp').and_return(true)
 
-      Dir.should_not_receive(:mkdir).with('/usr/local/evm/tmp')
+      Dir.should_not_receive(:mkdir).with('/tmp/evm/tmp')
 
       @foo.install!
     end
@@ -162,7 +162,7 @@ describe Evm::Package do
 
     it 'should remove installation path if exists' do
       File.stub(:exist?).and_return(true)
-      FileUtils.should_receive(:rm_r).with('/usr/local/evm/foo')
+      FileUtils.should_receive(:rm_r).with('/tmp/evm/foo')
 
       @foo.uninstall!
     end
@@ -200,7 +200,7 @@ describe Evm::Package do
   describe '.current' do
     it 'should find current' do
       File.stub(:symlink?).with(Evm::EVM_EMACS_PATH).and_return(true)
-      File.stub(:readlink).and_return('/usr/local/evm/foo/path/to/something')
+      File.stub(:readlink).and_return('/tmp/evm/foo/path/to/something')
 
       Evm::Package.should_receive(:find).with('foo')
       Evm::Package.current
