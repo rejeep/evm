@@ -42,6 +42,7 @@ module Evm
       optparse.parse!(argv)
 
       command = argv.shift
+      command = 'install' if command == 'i'
 
       if command == 'help' || !command
         puts optparse
