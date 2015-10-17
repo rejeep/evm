@@ -8,7 +8,14 @@ sudo is not possible, EVM added support for Travis specific binaries
 
 All `-bin` versions will are deprecated and will be removed. Do not use them!
 
-To run EVM on Travis, see https://gist.github.com/rejeep/ebcd57c3af83b049833b
+To run EVM on Travis, set the EVM path to `/tmp`:
+
+```bash
+$ evm config path /tmp
+```
+
+See https://gist.github.com/rejeep/ebcd57c3af83b049833b for more
+information on how to use EVM on Travis.
 
 ## Why EVM?
 
