@@ -101,10 +101,10 @@ $ export PATH="$HOME/.evm/bin:$PATH"
 
 ## Usage
 
-In the Evm `bin` directory, there are two commands:
+In the Evm `bin` directory, there are a few commands:
 
 * `evm` - Manage Emacs packages
-* `emacs` - Emacs binary for currently selected Emacs package
+* `emacs/evm-emacs` - Emacs shim with currently selected Emacs package
 
 ### list
 
@@ -156,7 +156,7 @@ Example:
 $ evm use emacs-24.2
 ```
 
-The Evm `emacs` binary will update and use that Emacs package.
+The Evm binary will update and use that Emacs package.
 
 ### uninstall <name>
 
@@ -172,8 +172,8 @@ Prints the full path to `name`'s Emacs executable. If no name is
 specified, use currently selected.
 
 ```sh
-$ evm bin
-$ evm bin emacs-24.2
+$ evm bin # /usr/local/evm/emacs-24.5/Emacs.app/Contents/MacOS/Emacs
+$ evm bin emacs-24.2 # /usr/local/evm/emacs-24.2/Emacs.app/Contents/MacOS/Emacs
 ```
 
 ### help
