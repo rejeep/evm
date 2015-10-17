@@ -225,6 +225,7 @@ $ sudo apt-get install build-essential
 $ sudo apt-get install libncurses-dev
 $ sudo apt-get install autoconf
 $ sudo apt-get install automake
+$ sudo apt-get install autogen
 $ sudo apt-get install git
 $ sudo apt-get install texinfo
 ```
@@ -244,6 +245,7 @@ $ tar -xvzf emacs-MAJOR-MINOR.tar.gz
 * Compile and Install Emacs
 
 ```bash
+$ ./autogen.sh # for snapshot
 $ ./configure --without-all --prefix=/tmp/emacs-MAJOR.MINOR-travis
 $ make bootstrap
 $ make install
