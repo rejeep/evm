@@ -246,7 +246,7 @@ $ make install
 
 ```bash
 $ cd /tmp
-$ tar -cvzf emacs-MAJOR-MINOR-travis.tar.gz emacs-MAJOR.MINOR-travis
+$ tar -cvzf emacs-MAJOR.MINOR-travis.tar.gz emacs-MAJOR.MINOR-travis
 ```
 
 * Copy from VM
