@@ -8,4 +8,5 @@ begin
   Evm::Cli.parse(ARGV)
 rescue Evm::Exception => e
   STDERR.puts e.message
+  exit 1
 end
