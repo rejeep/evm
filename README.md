@@ -252,7 +252,7 @@ $ tar -cvzf emacs-MAJOR-MINOR-travis.tar.gz emacs-MAJOR.MINOR-travis
 * Copy from VM
 
 ```bash
-$ vagrant scp ID:/usr/local/evm/emacs-MAJOR.MINOR-travis.tar.gz .
+$ vagrant scp ID:/tmp/emacs-MAJOR.MINOR-travis.tar.gz .
 ```
 
 * Create a new recipe and make a pull request.
