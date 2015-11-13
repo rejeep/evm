@@ -2,8 +2,9 @@ module Evm
   class Package
     attr_reader :name
 
-    def initialize(name)
+    def initialize(name, options = {})
       @name = name
+      @file = options[:file] || File
     end
 
     def current?
@@ -23,10 +24,14 @@ module Evm
     end
 
     def use!
-      FileUtils.ln_sf(bin, Evm::EVM_EMACS_PATH)
-      unless File.symlink?(Evm::EMACS_PATH)
-        FileUtils.ln_sf(Evm::EVM_EMACS_PATH, Evm::EMACS_PATH)
+      [Evm::EMACS_PATH, Evm::EVM_EMACS_PATH].each do |bin_path|
+        @file.delete(bin_path) if @file.exists?(bin_path)
+        @file.open(bin_path, 'w') do |file|
+          file.puts("#!/bin/bash\nexec \"#{bin}\" \"$@\"")
+        end
+        @file.chmod(0755, bin_path)
       end
+      Evm.config[:current] = name
     end
 
     def install!
@@ -69,11 +74,8 @@ module Evm
 
     class << self
       def current
-        if File.symlink?(Evm::EVM_EMACS_PATH)
-          current_bin_path = File.readlink(Evm::EVM_EMACS_PATH)
-          if (match = Regexp.new("#{Evm.config[:path]}/?(?<current>[^/]+)/.+").match(current_bin_path))
-            find match[:current]
-          end
+        if (name = Evm.config[:current])
+          find(name)
         end
       end
 
