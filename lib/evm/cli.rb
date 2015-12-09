@@ -17,6 +17,7 @@ module Evm
         opts.separator  '        bin [name]                   Show path to Emacs binary for package name'
         opts.separator  '        list                         List all available packages'
         opts.separator  '        use <name>                   Select name as current package'
+        opts.separator  '        config <var> <value>         Set the value of a configuration variable (like path)'
         opts.separator  '        help                         Display this help message'
         opts.separator  ''
         opts.separator  'Options:'
