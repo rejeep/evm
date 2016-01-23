@@ -23,7 +23,7 @@ module Evm
 
     def git(*args)
       @git ||= Evm::System.new('git')
-      @git.run(*args)
+      @git.run(*args, 'depth=1')
     end
   end
 end
