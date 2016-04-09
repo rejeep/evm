@@ -228,6 +228,7 @@ $ sudo apt-get install automake
 $ sudo apt-get install autogen
 $ sudo apt-get install git
 $ sudo apt-get install texinfo
+$ sudo apt-get install libtool
 ```
 
 * Download Emacs source
