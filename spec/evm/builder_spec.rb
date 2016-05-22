@@ -202,7 +202,7 @@ describe Evm::Builder do
 
     describe '#copy' do
       it 'should copy recursively' do
-        FileUtils.should_receive(:cp_r).with('from', 'to')
+        FileUtils.should_receive(:cp_r).with('from', 'to', preserve: true)
 
         @dsl.copy 'from', 'to'
       end
