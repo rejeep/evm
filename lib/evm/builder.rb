@@ -85,7 +85,7 @@ module Evm
       end
 
       def copy(from, to)
-        FileUtils.cp_r(from, to)
+        FileUtils.cp_r(from, to, preserve: true)
       end
 
       private
