@@ -201,9 +201,8 @@ describe Evm::Builder do
     end
 
     describe '#copy' do
-      it 'should copy recursively' do
-        FileUtils.should_receive(:cp_r).with('from', 'to', preserve: true)
-
+      it 'copies all files recursively and preserves file attributes' do
+        @dsl.should_receive(:run_command).with('cp -a from to')
         @dsl.copy 'from', 'to'
       end
     end
