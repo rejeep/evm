@@ -23,16 +23,12 @@ module Evm
         end
       end
 
+      def tar_xz(url)
+        tar_packaged(url, 'xz')
+      end
+
       def tar_gz(url)
-        tar_file_path = File.join(builds_path, @name + '.tar.gz')
-
-        remote_file = Evm::RemoteFile.new(url)
-        remote_file.download(tar_file_path)
-
-        FileUtils.mkdir(build_path)
-
-        tar_file = Evm::TarFile.new(tar_file_path)
-        tar_file.extract(builds_path, @name)
+        tar_packaged(url, 'gz')
       end
 
       def osx(&block)
@@ -89,6 +85,18 @@ module Evm
       end
 
       private
+
+      def tar_packaged(url,extension)
+        tar_file_path = File.join(builds_path, @name + '.tar.' + extension)
+
+        remote_file = Evm::RemoteFile.new(url)
+        remote_file.download(tar_file_path)
+
+        FileUtils.mkdir(build_path)
+
+        tar_file = Evm::TarFile.new(tar_file_path)
+        tar_file.extract(builds_path, @name)
+      end
 
       def run_command(command, *args)
         Dir.chdir(build_path) do

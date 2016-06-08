@@ -6,7 +6,7 @@ module Evm
 
     def extract(extract_to, name = nil)
       args = []
-      args << '-xzf'
+      args << '-xf'
       args << @tar_file
       args << '-C'
 
