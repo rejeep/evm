@@ -1,4 +1,5 @@
 /evm-*.gem
 /bin/emacs
+/bin/emacsclient
 /bin/evm-emacs
 /.config
