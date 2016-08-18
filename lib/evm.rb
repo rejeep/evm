@@ -6,6 +6,7 @@ module Evm
   ROOT_PATH = File.expand_path('..', File.dirname(__FILE__))
   LOCAL_PATH = File.join('/', 'usr', 'local', 'evm')
   EMACS_PATH = File.join(ROOT_PATH, 'bin', 'emacs')
+  EMACSCLIENT_PATH = File.join(ROOT_PATH, 'bin', 'emacsclient')
   EVM_EMACS_PATH = File.join(ROOT_PATH, 'bin', 'evm-emacs')
   CONFIG_FILE = File.join(ROOT_PATH, '.config')
   CONFIG_TYPES = [:path]
