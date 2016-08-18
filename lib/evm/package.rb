@@ -23,11 +23,23 @@ module Evm
       end
     end
 
+    def client_bin
+      if Evm::Os.osx? && File.exist?(File.join(path, 'Emacs.app'))
+        File.join(path, 'Emacs.app', 'Contents', 'MacOS', 'bin', 'emacsclient')
+      else
+        File.join(path, 'bin', 'emacsclient')
+      end
+    end
+
     def use!
-      [Evm::EMACS_PATH, Evm::EVM_EMACS_PATH].each do |bin_path|
+      [Evm::EMACS_PATH, Evm::EMACSCLIENT_PATH, Evm::EVM_EMACS_PATH].each do |bin_path|
         @file.delete(bin_path) if @file.exists?(bin_path)
         @file.open(bin_path, 'w') do |file|
-          file.puts("#!/bin/bash\nexec \"#{bin}\" \"$@\"")
+          if Evm::EMACSCLIENT_PATH == bin_path
+            file.puts("#!/bin/bash\nexec \"#{client_bin}\" \"$@\"")
+          else   
+            file.puts("#!/bin/bash\nexec \"#{bin}\" \"$@\"")
+          end
         end
         @file.chmod(0755, bin_path)
       end
