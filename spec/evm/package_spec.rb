@@ -100,6 +100,7 @@ describe Evm::Package do
   describe '#use!' do
     it 'creates emacs and evm-emacs shims' do
       expect(file_class).to receive(:exists?).with(Evm::EMACS_PATH).and_return(false)
+      expect(file_class).to receive(:exists?).with(Evm::EMACSCLIENT_PATH).and_return(false)
       expect(file_class).to receive(:exists?).with(Evm::EVM_EMACS_PATH).and_return(true)
       expect(file_class).to receive(:delete).with(Evm::EVM_EMACS_PATH)
       expect(file_class).to receive(:open).twice.with(anything, 'w').and_yield(file_instance)
