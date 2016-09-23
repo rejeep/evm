@@ -1,4 +1,4 @@
-recipe 'emacs-25' do
+recipe 'emacs-25.1' do
   tar_xz 'http://ftpmirror.gnu.org/emacs/emacs-25.1.tar.gz'
 
   osx do
