@@ -1,5 +1,5 @@
-recipe 'emacs-25-pre' do
-  tar_xz 'http://alpha.gnu.org/gnu/emacs/pretest/emacs-25.0.94.tar.xz'
+recipe 'emacs-25' do
+  tar_xz 'http://ftpmirror.gnu.org/emacs/emacs-25.1.tar.gz'
 
   osx do
     option '--with-ns'
