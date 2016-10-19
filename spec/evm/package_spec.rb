@@ -9,6 +9,10 @@ describe Evm::Package do
     double('file_instance')
   end
 
+  let :config do
+    double('config')
+  end
+
   before do
     @foo = Evm::Package.new('foo', file: file_class)
     @foo.stub(:name).and_return('foo')
@@ -107,6 +111,36 @@ describe Evm::Package do
       expect(file_instance).to receive(:puts).twice.with("#!/bin/bash\nexec \"/tmp/evm/foo/bin/emacs\" \"$@\"")
 
       @foo.use!
+    end
+
+    it 'sets current package' do
+      allow(file_class).to receive(:exists?)
+      allow(file_class).to receive(:open)
+      allow(file_class).to receive(:chmod)
+      allow(file_instance).to receive(:puts)
+      allow(Evm).to receive(:config).and_return(config)
+      expect(config).to receive(:[]=).with(:current, 'foo')
+
+      @foo.use!
+    end
+  end
+
+  describe '#disuse!' do
+    it 'removes emacs and evm-emacs shims' do
+      expect(file_class).to receive(:exists?).with(Evm::EMACS_PATH).and_return(true)
+      expect(file_class).to receive(:exists?).with(Evm::EVM_EMACS_PATH).and_return(true)
+      expect(file_class).to receive(:delete).with(Evm::EMACS_PATH)
+      expect(file_class).to receive(:delete).with(Evm::EVM_EMACS_PATH)
+
+      @foo.disuse!
+    end
+
+    it 'unsets current package' do
+      allow(file_class).to receive(:exists?)
+      allow(Evm).to receive(:config).and_return(config)
+      expect(config).to receive(:[]=).with(:current, nil)
+
+      @foo.disuse!
     end
   end
 
