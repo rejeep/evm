@@ -2,28 +2,28 @@ require 'spec_helper'
 
 describe Evm::Command::Bin do
   it 'should print current bin when not specified' do
-    Evm::Package.stub(:current) do |package_name, options|
+    allow(Evm::Package).to receive(:current) do |package_name, options|
       double('package', :bin => 'BIN')
     end
 
-    STDOUT.should_receive(:puts).with('BIN')
+    expect(STDOUT).to receive(:puts).with('BIN')
 
     Evm::Command::Bin.new([])
   end
 
   it 'should print specified bin when specified' do
-    Evm::Package.stub(:find) do |package_name, options|
+    allow(Evm::Package).to receive(:find) do |package_name, options|
       double('package', :bin => 'BIN')
     end
 
-    STDOUT.should_receive(:puts).with('BIN')
+    expect(STDOUT).to receive(:puts).with('BIN')
 
     Evm::Command::Bin.new(['foo'])
   end
 
   it 'should raise exception when no current and no specified' do
-    Evm::Package.stub(:find)
-    Evm::Package.stub(:current)
+    allow(Evm::Package).to receive(:find)
+    allow(Evm::Package).to receive(:current)
 
     expect {
       Evm::Command::Bin.new([])

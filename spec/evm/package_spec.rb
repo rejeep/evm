@@ -11,24 +11,24 @@ describe Evm::Package do
 
   before do
     @foo = Evm::Package.new('foo', file: file_class)
-    @foo.stub(:name).and_return('foo')
+    allow(@foo).to receive(:name).and_return('foo')
     @foo
   end
 
   describe '#current?' do
     it 'should be current if current name is same as name' do
-      Evm::Package.stub(:current).and_return(@foo)
-      Evm::Package.new('foo').should be_current
+      allow(Evm::Package).to receive(:current).and_return(@foo)
+      expect(Evm::Package.new('foo')).to be_current
     end
 
     it 'should not be current if current name is different from name' do
-      Evm::Package.stub(:current).and_return(@foo)
-      Evm::Package.new('bar').should_not be_current
+      allow(Evm::Package).to receive(:current).and_return(@foo)
+      expect(Evm::Package.new('bar')).not_to be_current
     end
 
     it 'should not be current if no current' do
-      Evm::Package.stub(:current)
-      Evm::Package.new('foo').should_not be_current
+      allow(Evm::Package).to receive(:current)
+      expect(Evm::Package.new('foo')).not_to be_current
     end
   end
 
@@ -38,62 +38,62 @@ describe Evm::Package do
     end
 
     it 'should be installed if binary exists' do
-      @foo.stub(:bin).and_return(@binary)
+      allow(@foo).to receive(:bin).and_return(@binary)
 
-      File.should_receive(:file?).with(@binary).and_return(true)
-      File.should_receive(:executable?).with(@binary).and_return(true)
+      expect(File).to receive(:file?).with(@binary).and_return(true)
+      expect(File).to receive(:executable?).with(@binary).and_return(true)
 
-      @foo.should be_installed
+      expect(@foo).to be_installed
     end
 
     it 'should not be installed if binary does not exist' do
-      @foo.stub(:bin).and_return(@binary)
+      allow(@foo).to receive(:bin).and_return(@binary)
 
-      File.should_receive(:file?).with(@binary).and_return(false)
+      expect(File).to receive(:file?).with(@binary).and_return(false)
 
-      @foo.should_not be_installed
+      expect(@foo).not_to be_installed
     end
 
     it 'should not be installed if binary exists, but is not binary' do
-      @foo.stub(:bin).and_return(@binary)
+      allow(@foo).to receive(:bin).and_return(@binary)
 
-      File.should_receive(:file?).with(@binary).and_return(true)
-      File.should_receive(:executable?).with(@binary).and_return(false)
+      expect(File).to receive(:file?).with(@binary).and_return(true)
+      expect(File).to receive(:executable?).with(@binary).and_return(false)
 
-      @foo.should_not be_installed
+      expect(@foo).not_to be_installed
     end
   end
 
   describe '#path' do
     it 'should be path to package path' do
-      @foo.path.should == '/tmp/evm/foo'
+      expect(@foo.path).to eq('/tmp/evm/foo')
     end
   end
 
   describe '#bin' do
     it 'should be bin/emacs if linux' do
-      Evm::Os.stub(:osx?).and_return(false)
-      Evm::Os.stub(:linux?).and_return(true)
+      allow(Evm::Os).to receive(:osx?).and_return(false)
+      allow(Evm::Os).to receive(:linux?).and_return(true)
 
-      @foo.bin.to_s.should == '/tmp/evm/foo/bin/emacs'
+      expect(@foo.bin.to_s).to eq('/tmp/evm/foo/bin/emacs')
     end
 
     it 'should be bin/emacs if osx and no nextstep' do
-      Evm::Os.stub(:osx?).and_return(true)
-      Evm::Os.stub(:linux?).and_return(false)
+      allow(Evm::Os).to receive(:osx?).and_return(true)
+      allow(Evm::Os).to receive(:linux?).and_return(false)
 
-      File.stub(:exist?).with('/tmp/evm/foo/Emacs.app').and_return(false)
+      allow(File).to receive(:exist?).with('/tmp/evm/foo/Emacs.app').and_return(false)
 
-      @foo.bin.to_s.should == '/tmp/evm/foo/bin/emacs'
+      expect(@foo.bin.to_s).to eq('/tmp/evm/foo/bin/emacs')
     end
 
     it 'should be nextstep bin if osx and nextstep' do
-      Evm::Os.stub(:osx?).and_return(true)
-      Evm::Os.stub(:linux?).and_return(false)
+      allow(Evm::Os).to receive(:osx?).and_return(true)
+      allow(Evm::Os).to receive(:linux?).and_return(false)
 
-      File.stub(:exist?).with('/tmp/evm/foo/Emacs.app').and_return(true)
+      allow(File).to receive(:exist?).with('/tmp/evm/foo/Emacs.app').and_return(true)
 
-      @foo.bin.should == '/tmp/evm/foo/Emacs.app/Contents/MacOS/Emacs'
+      expect(@foo.bin).to eq('/tmp/evm/foo/Emacs.app/Contents/MacOS/Emacs')
     end
   end
 
@@ -113,42 +113,42 @@ describe Evm::Package do
   describe '#install!' do
     before do
       @builder = double('builder')
-      @builder.should_receive(:build!)
+      expect(@builder).to receive(:build!)
 
-      File.stub(:exist?).with('/tmp/evm/foo').and_return(true)
-      File.stub(:exist?).with('/tmp/evm/tmp').and_return(true)
+      allow(File).to receive(:exist?).with('/tmp/evm/foo').and_return(true)
+      allow(File).to receive(:exist?).with('/tmp/evm/tmp').and_return(true)
 
-      Evm::Builder.stub(:new).and_return(@builder)
+      allow(Evm::Builder).to receive(:new).and_return(@builder)
     end
 
     it 'should create installation path if not exist' do
-      File.stub(:exist?).with('/tmp/evm/foo').and_return(false)
+      allow(File).to receive(:exist?).with('/tmp/evm/foo').and_return(false)
 
-      Dir.should_receive(:mkdir).with('/tmp/evm/foo')
+      expect(Dir).to receive(:mkdir).with('/tmp/evm/foo')
 
       @foo.install!
     end
 
     it 'should not create installation path if exists' do
-      File.stub(:exist?).with('/tmp/evm/foo').and_return(true)
+      allow(File).to receive(:exist?).with('/tmp/evm/foo').and_return(true)
 
-      Dir.should_not_receive(:mkdir)
+      expect(Dir).not_to receive(:mkdir)
 
       @foo.install!
     end
 
     it 'should create tmp path if not exist' do
-      File.stub(:exist?).with('/tmp/evm/tmp').and_return(false)
+      allow(File).to receive(:exist?).with('/tmp/evm/tmp').and_return(false)
 
-      Dir.should_receive(:mkdir).with('/tmp/evm/tmp')
+      expect(Dir).to receive(:mkdir).with('/tmp/evm/tmp')
 
       @foo.install!
     end
 
     it 'should not create installation path if exists' do
-      File.stub(:exist?).with('/tmp/evm/tmp').and_return(true)
+      allow(File).to receive(:exist?).with('/tmp/evm/tmp').and_return(true)
 
-      Dir.should_not_receive(:mkdir).with('/tmp/evm/tmp')
+      expect(Dir).not_to receive(:mkdir).with('/tmp/evm/tmp')
 
       @foo.install!
     end
@@ -156,35 +156,35 @@ describe Evm::Package do
 
   describe '#uninstall!' do
     before do
-      @foo.stub(:current?).and_return(false)
+      allow(@foo).to receive(:current?).and_return(false)
     end
 
     it 'should remove installation path if exists' do
-      File.stub(:exist?).and_return(true)
-      FileUtils.should_receive(:rm_r).with('/tmp/evm/foo')
+      allow(File).to receive(:exist?).and_return(true)
+      expect(FileUtils).to receive(:rm_r).with('/tmp/evm/foo')
 
       @foo.uninstall!
     end
 
     it 'should not remove installation path if not exists' do
-      File.stub(:exist?).and_return(false)
-      FileUtils.should_not_receive(:rm_r)
+      allow(File).to receive(:exist?).and_return(false)
+      expect(FileUtils).not_to receive(:rm_r)
 
       @foo.uninstall!
     end
 
     it 'should remove binary symlink if current' do
-      FileUtils.should_receive(:rm).with(Evm::EVM_EMACS_PATH)
+      expect(FileUtils).to receive(:rm).with(Evm::EVM_EMACS_PATH)
 
-      @foo.stub(:current?).and_return(true)
+      allow(@foo).to receive(:current?).and_return(true)
 
       @foo.uninstall!
     end
 
     it 'should not remove binary symlink file if not current' do
-      FileUtils.should_not_receive(:rm).with(Evm::EVM_EMACS_PATH)
+      expect(FileUtils).not_to receive(:rm).with(Evm::EVM_EMACS_PATH)
 
-      @foo.stub(:current?).and_return(false)
+      allow(@foo).to receive(:current?).and_return(false)
 
       @foo.uninstall!
     end
@@ -192,7 +192,7 @@ describe Evm::Package do
 
   describe '#to_s' do
     it 'should return name' do
-      @foo.to_s.should == 'foo'
+      expect(@foo.to_s).to eq('foo')
     end
   end
 
@@ -210,13 +210,13 @@ describe Evm::Package do
 
   describe '.find' do
     it 'should return recipe with same name' do
-      Evm::Recipe.stub(:find).and_return({})
+      allow(Evm::Recipe).to receive(:find).and_return({})
 
-      Evm::Package.find('foo').name.should == 'foo'
+      expect(Evm::Package.find('foo').name).to eq('foo')
     end
 
     it 'should raise exception if no recipe with same name' do
-      Evm::Recipe.stub(:find).and_return(nil)
+      allow(Evm::Recipe).to receive(:find).and_return(nil)
       expect {
         Evm::Package.find('baz')
       }.to raise_error('No such package: baz')
@@ -229,12 +229,12 @@ describe Evm::Package do
       recipes << double('recipe-1', :name => 'foo')
       recipes << double('recipe-2', :name => 'bar')
 
-      Evm::Recipe.stub(:all).and_return(recipes)
+      allow(Evm::Recipe).to receive(:all).and_return(recipes)
 
       package_1, package_2 = Evm::Package.all
 
-      package_1.name.should == 'foo'
-      package_2.name.should == 'bar'
+      expect(package_1.name).to eq('foo')
+      expect(package_2.name).to eq('bar')
     end
   end
 end

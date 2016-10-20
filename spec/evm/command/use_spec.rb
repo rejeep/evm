@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe Evm::Command::Use do
   it 'should use package name if installed' do
-    Evm::Package.stub(:find) do |package_name|
+    allow(Evm::Package).to receive(:find) do |package_name|
       package = double('package')
-      package.stub(:installed?).and_return(true)
-      package.should_receive(:use!)
+      allow(package).to receive(:installed?).and_return(true)
+      expect(package).to receive(:use!)
       package
     end
 
@@ -13,9 +13,9 @@ describe Evm::Command::Use do
   end
 
   it 'should raise exception if package is not installed' do
-    Evm::Package.stub(:find) do |package_name|
+    allow(Evm::Package).to receive(:find) do |package_name|
       package = double('package')
-      package.stub(:installed?).and_return(false)
+      allow(package).to receive(:installed?).and_return(false)
       package
     end
 

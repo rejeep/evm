@@ -7,7 +7,7 @@ describe Evm::Builder do
       @git_url = 'git://domain.com/emacs.git'
 
       @dsl = Evm::Builder::Dsl.new
-      @dsl.stub(:path).and_return('/path/to')
+      allow(@dsl).to receive(:path).and_return('/path/to')
     end
 
     describe '#tar_gz' do
@@ -15,16 +15,16 @@ describe Evm::Builder do
         tar_file_path = '/tmp/evm/tmp/name.tar.gz'
 
         remote_file = double('remote_file')
-        remote_file.should_receive(:download).with(tar_file_path)
+        expect(remote_file).to receive(:download).with(tar_file_path)
 
-        Evm::RemoteFile.should_receive(:new).with(@tar_gz_url).and_return(remote_file)
+        expect(Evm::RemoteFile).to receive(:new).with(@tar_gz_url).and_return(remote_file)
 
         tar_file = double('tar_file')
-        tar_file.should_receive(:extract).with('/tmp/evm/tmp', 'name')
+        expect(tar_file).to receive(:extract).with('/tmp/evm/tmp', 'name')
 
-        Evm::TarFile.should_receive(:new).with(tar_file_path).and_return(tar_file)
+        expect(Evm::TarFile).to receive(:new).with(tar_file_path).and_return(tar_file)
 
-        FileUtils.should_receive(:mkdir).with('/tmp/evm/tmp/name')
+        expect(FileUtils).to receive(:mkdir).with('/tmp/evm/tmp/name')
 
         @dsl.recipe 'name' do
           @dsl.tar_gz(@tar_gz_url)
@@ -35,16 +35,16 @@ describe Evm::Builder do
     describe '#git' do
       before do
         @git_repo = double('git_repo')
-        @git_repo.stub(:exist?).and_return(true)
-        @git_repo.stub(:clone)
-        @git_repo.stub(:pull)
+        allow(@git_repo).to receive(:exist?).and_return(true)
+        allow(@git_repo).to receive(:clone)
+        allow(@git_repo).to receive(:pull)
 
-        Evm::Git.stub(:new).and_return(@git_repo)
+        allow(Evm::Git).to receive(:new).and_return(@git_repo)
       end
 
       it 'should pull if exist' do
-        @git_repo.stub(:exist?).and_return(true)
-        @git_repo.should_receive(:pull)
+        allow(@git_repo).to receive(:exist?).and_return(true)
+        expect(@git_repo).to receive(:pull)
 
         @dsl.recipe 'name' do
           @dsl.git(@git_url)
@@ -52,8 +52,8 @@ describe Evm::Builder do
       end
 
       it 'should clone if not exist' do
-        @git_repo.stub(:exist?).and_return(false)
-        @git_repo.should_receive(:clone).with(@git_url)
+        allow(@git_repo).to receive(:exist?).and_return(false)
+        expect(@git_repo).to receive(:clone).with(@git_url)
 
         @dsl.recipe 'name' do
           @dsl.git(@git_url)
@@ -63,7 +63,7 @@ describe Evm::Builder do
 
     describe '#osx' do
       it 'should yield if osx' do
-        Evm::Os.stub(:osx?).and_return(true)
+        allow(Evm::Os).to receive(:osx?).and_return(true)
 
         expect { |block|
           @dsl.osx(&block)
@@ -71,7 +71,7 @@ describe Evm::Builder do
       end
 
       it 'should not yield if not osx' do
-        Evm::Os.stub(:osx?).and_return(false)
+        allow(Evm::Os).to receive(:osx?).and_return(false)
 
         expect { |block|
           @dsl.osx(&block)
@@ -81,7 +81,7 @@ describe Evm::Builder do
 
     describe '#linux' do
       it 'should yield if linux' do
-        Evm::Os.stub(:linux?).and_return(true)
+        allow(Evm::Os).to receive(:linux?).and_return(true)
 
         expect { |block|
           @dsl.linux(&block)
@@ -89,7 +89,7 @@ describe Evm::Builder do
       end
 
       it 'should not yield if not linux' do
-        Evm::Os.stub(:linux?).and_return(false)
+        allow(Evm::Os).to receive(:linux?).and_return(false)
 
         expect { |block|
           @dsl.linux(&block)
@@ -100,12 +100,12 @@ describe Evm::Builder do
     describe '#option' do
       it 'should add option without value' do
         @dsl.option '--foo'
-        @dsl.instance_variable_get('@options').should =~ ['--foo']
+        expect(@dsl.instance_variable_get('@options')).to eq(['--foo'])
       end
 
       it 'should add option with value' do
         @dsl.option '--foo', 'bar'
-        @dsl.instance_variable_get('@options').should =~ ['--foo', 'bar']
+        expect(@dsl.instance_variable_get('@options')).to eq(['--foo', 'bar'])
       end
 
       it 'should add multiple options' do
@@ -113,8 +113,7 @@ describe Evm::Builder do
         @dsl.option '--foo', 'bar'
         @dsl.option '--bar', 'baz'
         @dsl.option '--qux'
-        @dsl.instance_variable_get('@options').should =~
-          ['--foo', '--foo', 'bar', '--bar', 'baz', '--qux']
+        expect(@dsl.instance_variable_get('@options')).to eq(['--foo', '--foo', 'bar', '--bar', 'baz', '--qux'])
       end
     end
 
@@ -128,25 +127,25 @@ describe Evm::Builder do
 
     describe '#autogen' do
       it 'should run make command with target' do
-        @dsl.should_receive(:run_command).with('./autogen.sh')
+        expect(@dsl).to receive(:run_command).with('./autogen.sh')
         @dsl.autogen
       end
     end
 
     describe '#configure' do
       it 'should configure when no options' do
-        @dsl.should_receive(:run_command).with('./configure')
+        expect(@dsl).to receive(:run_command).with('./configure')
         @dsl.configure
       end
 
       it 'should configure when single option' do
-        @dsl.should_receive(:run_command).with('./configure', '--foo', 'bar')
+        expect(@dsl).to receive(:run_command).with('./configure', '--foo', 'bar')
         @dsl.option '--foo', 'bar'
         @dsl.configure
       end
 
       it 'should configure when multiple options' do
-        @dsl.should_receive(:run_command).with('./configure', '--foo', 'bar', '--baz')
+        expect(@dsl).to receive(:run_command).with('./configure', '--foo', 'bar', '--baz')
         @dsl.option '--foo', 'bar'
         @dsl.option '--baz'
         @dsl.configure
@@ -155,7 +154,7 @@ describe Evm::Builder do
 
     describe '#make' do
       it 'should run make command with target' do
-        @dsl.should_receive(:run_command).with('make', 'foo')
+        expect(@dsl).to receive(:run_command).with('make', 'foo')
         @dsl.make('foo')
       end
     end
@@ -163,7 +162,7 @@ describe Evm::Builder do
     describe '#build_path' do
       it 'should return package build path' do
         @dsl.recipe 'name' do
-          @dsl.build_path.should == '/tmp/evm/tmp/name'
+          expect(@dsl.build_path).to eq('/tmp/evm/tmp/name')
         end
       end
     end
@@ -171,7 +170,7 @@ describe Evm::Builder do
     describe '#builds_path' do
       it 'should return package builds path' do
         @dsl.recipe 'name' do
-          @dsl.builds_path.should == '/tmp/evm/tmp'
+          expect(@dsl.builds_path).to eq('/tmp/evm/tmp')
         end
       end
     end
@@ -179,7 +178,7 @@ describe Evm::Builder do
     describe '#installation_path' do
       it 'should return package installation path' do
         @dsl.recipe 'name' do
-          @dsl.installation_path.should == '/tmp/evm/name'
+          expect(@dsl.installation_path).to eq('/tmp/evm/name')
         end
       end
     end
@@ -187,22 +186,22 @@ describe Evm::Builder do
     describe '#installations_path' do
       it 'should return package installations path' do
         @dsl.recipe 'name' do
-          @dsl.installations_path.should == '/tmp/evm'
+          expect(@dsl.installations_path).to eq('/tmp/evm')
         end
       end
     end
 
     describe '#platform_name' do
       it 'should platform name' do
-        Evm::Os.stub(:platform_name).and_return(:foo)
+        allow(Evm::Os).to receive(:platform_name).and_return(:foo)
 
-        @dsl.platform_name.should == :foo
+        expect(@dsl.platform_name).to eq(:foo)
       end
     end
 
     describe '#copy' do
       it 'copies all files recursively and preserves file attributes' do
-        @dsl.should_receive(:run_command).with('cp -a from to')
+        expect(@dsl).to receive(:run_command).with('cp -a from to')
         @dsl.copy 'from', 'to'
       end
     end
