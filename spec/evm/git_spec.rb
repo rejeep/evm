@@ -9,30 +9,30 @@ describe Evm::Git do
 
   describe 'exist?' do
     it 'should exist when path does exist' do
-      File.stub(:exist?).and_return(false)
+      allow(File).to receive(:exist?).and_return(false)
 
-      @git.exist?.should == false
+      expect(@git.exist?).to be false
     end
 
     it 'should not exist when path does not exist' do
-      File.stub(:exist?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
 
-      @git.exist?.should == true
+      expect(@git.exist?).to be true
     end
   end
 
   describe 'clone' do
     it 'should clone url to path' do
-      @git.should_receive(:git).with('clone', 'URL', @path)
+      expect(@git).to receive(:git).with('clone', 'URL', @path)
       @git.clone('URL')
     end
   end
 
   describe 'pull' do
     it 'should pull in path' do
-      Dir.should_receive(:chdir).with(@path).and_yield
+      expect(Dir).to receive(:chdir).with(@path).and_yield
 
-      @git.should_receive(:git).with('pull')
+      expect(@git).to receive(:git).with('pull')
       @git.pull
     end
   end

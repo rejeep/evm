@@ -2,35 +2,35 @@ require 'spec_helper'
 
 describe Evm::Command::List do
   it 'should print list of packages' do
-    Evm::Package.stub(:all) do
+    allow(Evm::Package).to receive(:all) do
       foo = double('foo')
-      foo.stub(:current?).and_return(true)
-      foo.stub(:installed?).and_return(true)
-      foo.stub(:to_s).and_return('foo')
+      allow(foo).to receive(:current?).and_return(true)
+      allow(foo).to receive(:installed?).and_return(true)
+      allow(foo).to receive(:to_s).and_return('foo')
 
       bar = double('bar')
-      bar.stub(:current?).and_return(false)
-      bar.stub(:installed?).and_return(false)
-      bar.stub(:to_s).and_return('bar')
+      allow(bar).to receive(:current?).and_return(false)
+      allow(bar).to receive(:installed?).and_return(false)
+      allow(bar).to receive(:to_s).and_return('bar')
 
       baz = double('baz')
-      baz.stub(:current?).and_return(false)
-      baz.stub(:installed?).and_return(true)
-      baz.stub(:to_s).and_return('baz')
+      allow(baz).to receive(:current?).and_return(false)
+      allow(baz).to receive(:installed?).and_return(true)
+      allow(baz).to receive(:to_s).and_return('baz')
 
       [foo, bar, baz]
     end
 
     output = []
-    STDOUT.stub(:puts) { |*args|
+    allow(STDOUT).to receive(:puts) { |*args|
       output << args.first.to_s + "\n"
     }
-    STDOUT.stub(:print) { |*args|
+    allow(STDOUT).to receive(:print) { |*args|
       output << args.first.to_s
     }
 
     Evm::Command::List.new()
 
-    output.join.should == "* foo [I]\nbar\nbaz [I]\n"
+    expect(output.join).to eq("* foo [I]\nbar\nbaz [I]\n")
   end
 end
