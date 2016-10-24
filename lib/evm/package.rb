@@ -24,14 +24,25 @@ module Evm
     end
 
     def use!
+      delete_shims!
       [Evm::EMACS_PATH, Evm::EVM_EMACS_PATH].each do |bin_path|
-        @file.delete(bin_path) if @file.exists?(bin_path)
         @file.open(bin_path, 'w') do |file|
           file.puts("#!/bin/bash\nexec \"#{bin}\" \"$@\"")
         end
         @file.chmod(0755, bin_path)
       end
       Evm.config[:current] = name
+    end
+
+    def disuse!
+      delete_shims!
+      Evm.config[:current] = nil
+    end
+
+    def delete_shims!
+      [Evm::EMACS_PATH, Evm::EVM_EMACS_PATH].each do |bin_path|
+        @file.delete(bin_path) if @file.exists?(bin_path)
+      end
     end
 
     def install!
@@ -95,5 +106,7 @@ module Evm
         end
       end
     end
+
+    private :delete_shims!
   end
 end

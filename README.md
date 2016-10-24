@@ -158,6 +158,14 @@ $ evm use emacs-24.2
 
 The Evm binary will update and use that Emacs package.
 
+### disuse
+
+To stop using an EVM binary and restore your personal or system defaults:
+
+```sh
+$ evm disuse
+```
+
 ### uninstall <name>
 
 To uninstall a version, run:
