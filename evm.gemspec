@@ -8,4 +8,5 @@ Gem::Specification.new do |s|
   s.files       = Dir.glob('{lib,spec}/**/*') + %w(README.md)
   s.homepage    = 'http://github.com/rejeep/evm'
   s.license     = 'MIT'
+  s.executables = ['evm']
 end
