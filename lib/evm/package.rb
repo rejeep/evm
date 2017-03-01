@@ -12,7 +12,7 @@ module Evm
     end
 
     def installed?
-      File.file?(bin) && File.executable?(bin)
+      @file.directory?(path)
     end
 
     def bin

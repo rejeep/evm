@@ -37,33 +37,13 @@ describe Evm::Package do
   end
 
   describe '#installed?' do
-    before do
-      @binary = '/tmp/evm/foo/bin/emacs'
-    end
-
-    it 'should be installed if binary exists' do
-      allow(@foo).to receive(:bin).and_return(@binary)
-
-      expect(File).to receive(:file?).with(@binary).and_return(true)
-      expect(File).to receive(:executable?).with(@binary).and_return(true)
-
+    it 'should be installed if path exists' do
+      allow(file_class).to receive(:directory?).with(@foo.path).and_return(true)
       expect(@foo).to be_installed
     end
 
-    it 'should not be installed if binary does not exist' do
-      allow(@foo).to receive(:bin).and_return(@binary)
-
-      expect(File).to receive(:file?).with(@binary).and_return(false)
-
-      expect(@foo).not_to be_installed
-    end
-
-    it 'should not be installed if binary exists, but is not binary' do
-      allow(@foo).to receive(:bin).and_return(@binary)
-
-      expect(File).to receive(:file?).with(@binary).and_return(true)
-      expect(File).to receive(:executable?).with(@binary).and_return(false)
-
+    it 'should not be installed if path does not exist' do
+      allow(file_class).to receive(:directory?).with(@foo.path).and_return(false)
       expect(@foo).not_to be_installed
     end
   end
