@@ -16,10 +16,18 @@ module Evm
     end
 
     def bin
-      if Evm::Os.osx? && File.exist?(File.join(path, 'Emacs.app'))
+      if Evm::Os.osx? && @file.exists?(File.join(path, 'Emacs.app'))
         File.join(path, 'Emacs.app', 'Contents', 'MacOS', 'Emacs')
       else
-        File.join(path, 'bin', 'emacs')
+        emacs_bin = File.join(path, 'bin', 'emacs')
+        if @file.exists?(emacs_bin)
+          emacs_bin
+        else
+          remacs_bin = File.join(path, 'bin', 'remacs')
+          if @file.exists?(remacs_bin)
+            remacs_bin
+          end
+        end
       end
     end
 

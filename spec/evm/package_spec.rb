@@ -58,7 +58,7 @@ describe Evm::Package do
     it 'should be bin/emacs if linux' do
       allow(Evm::Os).to receive(:osx?).and_return(false)
       allow(Evm::Os).to receive(:linux?).and_return(true)
-
+      allow(file_class).to receive(:exists?).with('/tmp/evm/foo/bin/emacs').and_return(true)
       expect(@foo.bin.to_s).to eq('/tmp/evm/foo/bin/emacs')
     end
 
@@ -66,7 +66,8 @@ describe Evm::Package do
       allow(Evm::Os).to receive(:osx?).and_return(true)
       allow(Evm::Os).to receive(:linux?).and_return(false)
 
-      allow(File).to receive(:exist?).with('/tmp/evm/foo/Emacs.app').and_return(false)
+      allow(file_class).to receive(:exists?).with('/tmp/evm/foo/Emacs.app').and_return(false)
+      allow(file_class).to receive(:exists?).with('/tmp/evm/foo/bin/emacs').and_return(true)
 
       expect(@foo.bin.to_s).to eq('/tmp/evm/foo/bin/emacs')
     end
@@ -75,15 +76,27 @@ describe Evm::Package do
       allow(Evm::Os).to receive(:osx?).and_return(true)
       allow(Evm::Os).to receive(:linux?).and_return(false)
 
-      allow(File).to receive(:exist?).with('/tmp/evm/foo/Emacs.app').and_return(true)
+      allow(file_class).to receive(:exists?).with('/tmp/evm/foo/Emacs.app').and_return(true)
 
       expect(@foo.bin).to eq('/tmp/evm/foo/Emacs.app/Contents/MacOS/Emacs')
+    end
+
+    context 'remacs' do
+      it 'returns bin/remacs if linux' do
+        allow(Evm::Os).to receive(:osx?).and_return(false)
+        allow(Evm::Os).to receive(:linux?).and_return(true)
+        allow(file_class).to receive(:exists?).with('/tmp/evm/foo/bin/emacs').and_return(false)
+        allow(file_class).to receive(:exists?).with('/tmp/evm/foo/bin/remacs').and_return(true)
+        expect(@foo.bin.to_s).to eq('/tmp/evm/foo/bin/remacs')
+      end
     end
   end
 
   describe '#use!' do
     it 'creates emacs and evm-emacs shims' do
       expect(file_class).to receive(:exists?).with(Evm::EMACS_PATH).and_return(false)
+      allow(file_class).to receive(:exists?).with('/tmp/evm/foo/Emacs.app').and_return(false)
+      allow(file_class).to receive(:exists?).with('/tmp/evm/foo/bin/emacs').and_return(true)
       expect(file_class).to receive(:exists?).with(Evm::EVM_EMACS_PATH).and_return(true)
       expect(file_class).to receive(:delete).with(Evm::EVM_EMACS_PATH)
       expect(file_class).to receive(:open).twice.with(anything, 'w').and_yield(file_instance)
