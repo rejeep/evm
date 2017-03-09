@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 EVM_DIR="$HOME/.evm"
 
