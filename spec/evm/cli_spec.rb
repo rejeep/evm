@@ -50,4 +50,13 @@ describe Evm::Cli do
       Evm::Cli.parse(['bar'])
     }.to raise_error('No such command: bar')
   end
+
+  context 'command aliases' do
+    it 'aliases i to install' do
+      install = double('install')
+      expect(install).to receive(:new)
+      stub_const('Evm::Command::Install', install)
+      Evm::Cli.parse(['i'])
+    end
+  end
 end

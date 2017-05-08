@@ -128,18 +128,20 @@ emacs-24.3-travis [I]
 The `[I]` shows what versions are currently installed and the `*`
 shows what version is currently selected.
 
-### install <name>
+### install/i <name>
 
 To install a version, run:
 
 ```sh
 $ evm install version
+$ evm i version
 ```
 
 Example:
 
 ```sh
 $ evm install emacs-24.3
+$ evm i emacs-24.3
 ```
 
 ### use <name>
