@@ -216,63 +216,50 @@ modifications for the new version.  Also add the new version to the
 
 If you want to contribute a Travis binary, these instructions will help.
 
-* Install [Vagrant](https://www.vagrantup.com/)
+1. Install [Docker](https://www.docker.com/)
+1. Follow
+   [Travis instructions](https://docs.travis-ci.com/user/common-build-problems/#Running-a-Container-Based-Docker-Image-Locally)
+   on running a Travis image locally
+1. In the docker container, install necessary tools
 
-* Install Vagrant SCP (https://github.com/invernizzi/vagrant-scp)
+    ```bash
+    docker$ sudo apt-get install build-essential libncurses-dev autoconf automake autogen git texinfo libtool
+    ```
+1. Download Emacs source
 
-* Clone https://github.com/travis-ci/travis-cookbooks
+    ```bash
+    docker$ wget http://ftpmirror.gnu.org/emacs/emacs-MAJOR.MINOR.tar.gz
+    ```
+1. Unzip it
 
-* Enter `travis-cookbooks` and run `vagrant init hashicorp/precise64` then `vagrant up`
+    ```bash
+    docker$ tar -xvzf emacs-MAJOR.MINOR.tar.gz
+    ```
+1. Compile and Install Emacs (follow
+   [these instructions](http://stackoverflow.com/questions/37544423/how-to-build-emacs-from-source-in-docker-hub-gap-between-bss-and-heap#37561793)
+   if you have a `"gap between BSS and heap error"`)
 
-* SSH into the VM: `$ vagrant ssh ID`
+    ```bash
+    docker$ cd emacs-MAJOR.MINOR
+    docker$ ./autogen.sh # for snapshot
+    docker$ ./configure --without-all --prefix=/tmp/emacs-25.2-travis
+    docker$ make bootstrap
+    docker$ make install
+    ```
+1. Tar it
 
-* Install necessary tools
+    ```bash
+    docker$ cd /home/travis
+    docker$ tar -C /tmp -cvzf emacs-MAJOR.MINOR-travis.tar.gz emacs-MAJOR.MINOR-travis
+    ```
 
-```bash
-$ sudo apt-get install build-essential
-$ sudo apt-get install libncurses-dev
-$ sudo apt-get install autoconf
-$ sudo apt-get install automake
-$ sudo apt-get install autogen
-$ sudo apt-get install git
-$ sudo apt-get install texinfo
-$ sudo apt-get install libtool
-```
+1. Copy the tarball from the docker container to the host
 
-* Download Emacs source
+    ```bash
+    docker$ exit
+    $ docker cp <containerId>:/home/travis/emacs-MAJOR.MINOR-travis.tar.gz .
+    ```
 
-```bash
-$ wget http://ftpmirror.gnu.org/emacs/emacs-MAJOR.MINOR.tar.gz
-```
+1. Create a new recipe and make a pull request.
 
-* Unzip it
-
-```bash
-$ tar -xvzf emacs-MAJOR-MINOR.tar.gz
-```
-
-* Compile and Install Emacs
-
-```bash
-$ ./autogen.sh # for snapshot
-$ ./configure --without-all --prefix=/tmp/emacs-MAJOR.MINOR-travis
-$ make bootstrap
-$ make install
-```
-
-* Tar it
-
-```bash
-$ cd /tmp
-$ tar -cvzf emacs-MAJOR.MINOR-travis.tar.gz emacs-MAJOR.MINOR-travis
-```
-
-* Copy from VM
-
-```bash
-$ vagrant scp ID:/tmp/emacs-MAJOR.MINOR-travis.tar.gz .
-```
-
-* Create a new recipe and make a pull request.
-
-* Ask maintainer to add a new release and add the binary.
+1. Ask maintainer to add a new release and add the binary.
