@@ -228,36 +228,36 @@ If you want to contribute a Travis binary, these instructions will help.
 1. Download Emacs source
 
     ```bash
-    docker$ wget http://ftpmirror.gnu.org/emacs/emacs-MAJOR.MINOR.tar.gz
+    docker$ export VERSION=25.3 # choose your version
+    docker$ wget http://ftpmirror.gnu.org/emacs/emacs-$VERSION.tar.gz
     ```
 1. Unzip it
 
     ```bash
-    docker$ tar -xvzf emacs-MAJOR.MINOR.tar.gz
+    docker$ tar -xvzf emacs-$VERSION.tar.gz
     ```
 1. Compile and Install Emacs (follow
    [these instructions](http://stackoverflow.com/questions/37544423/how-to-build-emacs-from-source-in-docker-hub-gap-between-bss-and-heap#37561793)
    if you have a `"gap between BSS and heap error"`)
 
     ```bash
-    docker$ cd emacs-MAJOR.MINOR
+    docker$ cd emacs-$VERSION
     docker$ ./autogen.sh # for snapshot
-    docker$ ./configure --without-all --prefix=/tmp/emacs-25.2-travis
+    docker$ ./configure --without-all --prefix=/tmp/emacs-$VERSION-travis
     docker$ make bootstrap
     docker$ make install
     ```
 1. Tar it
 
     ```bash
-    docker$ cd /home/travis
-    docker$ tar -C /tmp -cvzf emacs-MAJOR.MINOR-travis.tar.gz emacs-MAJOR.MINOR-travis
+    docker$ tar -C /tmp --remove-files -cvzf ~/emacs-$VERSION-travis.tar.gz emacs-$VERSION-travis
     ```
 
 1. Copy the tarball from the docker container to the host
 
     ```bash
     docker$ exit
-    $ docker cp <containerId>:/home/travis/emacs-MAJOR.MINOR-travis.tar.gz .
+    $ docker cp <containerId>:/home/travis/emacs-$VERSION-travis.tar.gz .
     ```
 
 1. Create a new recipe and make a pull request.
