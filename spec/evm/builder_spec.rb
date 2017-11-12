@@ -53,10 +53,19 @@ describe Evm::Builder do
 
       it 'should clone if not exist' do
         allow(@git_repo).to receive(:exist?).and_return(false)
-        expect(@git_repo).to receive(:clone).with(@git_url)
+        expect(@git_repo).to receive(:clone).with(@git_url, nil)
 
         @dsl.recipe 'name' do
           @dsl.git(@git_url)
+        end
+      end
+
+      it 'should clone a branch' do
+        allow(@git_repo).to receive(:exist?).and_return(false)
+        expect(@git_repo).to receive(:clone).with(@git_url, 'branch')
+
+        @dsl.recipe 'name' do
+          @dsl.git(@git_url, 'branch')
         end
       end
     end

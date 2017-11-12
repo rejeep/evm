@@ -14,12 +14,12 @@ module Evm
         yield
       end
 
-      def git(url)
+      def git(url, branch = nil)
         git_repo = Evm::Git.new(build_path)
         if git_repo.exist?
           git_repo.pull
         else
-          git_repo.clone(url)
+          git_repo.clone(url, branch)
         end
       end
 
