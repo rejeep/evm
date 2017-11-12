@@ -8,7 +8,7 @@ module Evm
       File.exist?(@path)
     end
 
-    def clone(url, branch=nil)
+    def clone(url, branch = nil)
       args = 'clone', url, @path
       args << "--branch=#{branch}" if branch
       git(*args)

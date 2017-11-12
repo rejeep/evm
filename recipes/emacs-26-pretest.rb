@@ -1,5 +1,5 @@
 recipe 'emacs-26-pretest' do
-  git 'http://git.savannah.gnu.org/r/emacs.git --branch emacs-26.0.90'
+  git 'http://git.savannah.gnu.org/r/emacs.git', 'emacs-26.0.90'
 
   osx do
     option '--with-ns'
