@@ -28,6 +28,13 @@ describe Evm::Git do
     end
   end
 
+  describe 'clone branch' do
+    it 'should clone url with branch specification to path' do
+      expect(@git).to receive(:git).with('clone', 'URL', @path, '--branch=branch')
+      @git.clone('URL', 'branch')
+    end
+  end
+
   describe 'pull' do
     it 'should pull in path' do
       expect(Dir).to receive(:chdir).with(@path).and_yield
