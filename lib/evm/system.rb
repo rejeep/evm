@@ -7,7 +7,7 @@ module Evm
     def run(*args)
       succeeded = Kernel.system(@executable, *args)
       unless succeeded
-        print "Failed! See logs above for error."
+        STDOUT.puts "Failed! See logs above for error."
         Kernel.exit($?.exitstatus)
       end
     end
