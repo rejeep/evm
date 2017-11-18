@@ -25,6 +25,7 @@ describe Evm::System do
     end
 
     it 'should exit if the command fails' do
+      expect(STDERR).to receive(:puts).with('Failed! See logs above for error.')
       expect(Kernel).to receive(:exit)
 
       # Based on http://stackoverflow.com/a/4589517
