@@ -87,7 +87,7 @@ module Evm
       private
 
       def tar_packaged(url, extension)
-        FileUtils.mkdir(build_path)
+        FileUtils.mkdir_p(build_path)
         tar_file_path = File.join(builds_path, @name + '.tar.' + extension)
 
         remote_file = Evm::RemoteFile.new(url)

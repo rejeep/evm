@@ -24,7 +24,7 @@ describe Evm::Builder do
 
         expect(Evm::TarFile).to receive(:new).with(tar_file_path).and_return(tar_file)
 
-        expect(FileUtils).to receive(:mkdir).with('/tmp/evm/tmp/name')
+        expect(FileUtils).to receive(:mkdir_p).with('/tmp/evm/tmp/name')
 
         @dsl.recipe 'name' do
           @dsl.tar_gz(@tar_gz_url)

@@ -54,8 +54,8 @@ module Evm
     end
 
     def install!
-      unless File.exist?(path)
-        Dir.mkdir(path)
+      unless installed?
+        FileUtils.mkdir_p(path)
       end
 
       Evm::Builder.new(recipe).build!

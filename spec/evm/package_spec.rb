@@ -148,7 +148,7 @@ describe Evm::Package do
     end
 
     it 'should create installation path if not exist' do
-      allow(File).to receive(:exist?).with('/tmp/evm/foo').and_return(false)
+      allow(file_class).to receive(:directory?).with('/tmp/evm/foo').and_return(false)
 
       expect(Dir).to receive(:mkdir).with('/tmp/evm/foo')
 
@@ -156,15 +156,12 @@ describe Evm::Package do
     end
 
     it 'should not create installation path if exists' do
-      allow(File).to receive(:exist?).with('/tmp/evm/foo').and_return(true)
+      allow(file_class).to receive(:directory?).with('/tmp/evm/foo').and_return(true)
 
       expect(Dir).not_to receive(:mkdir)
 
       @foo.install!
     end
-
-
-
   end
 
   describe '#uninstall!' do
