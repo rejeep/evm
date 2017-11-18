@@ -71,7 +71,7 @@ module Evm
       end
 
       if current?
-        FileUtils.rm(Evm::EVM_EMACS_PATH)
+        disuse!
       end
     end
 

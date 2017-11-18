@@ -200,18 +200,28 @@ describe Evm::Package do
       @foo.uninstall!
     end
 
-    it 'should remove binary symlink if current' do
-      expect(FileUtils).to receive(:rm).with(Evm::EVM_EMACS_PATH)
-
+    it 'should remove shims and unset current if current' do
       allow(@foo).to receive(:current?).and_return(true)
+      allow(config).to receive(:[]).with(:path).and_return(@foo.path)
+      allow(Evm).to receive(:config).and_return(config)
+
+      expect(file_class).to receive(:exists?).with(Evm::EMACS_PATH).and_return(true)
+      expect(file_class).to receive(:exists?).with(Evm::EVM_EMACS_PATH).and_return(true)
+      expect(file_class).to receive(:delete).with(Evm::EVM_EMACS_PATH)
+      expect(file_class).to receive(:delete).with(Evm::EMACS_PATH)
+      expect(config).to receive(:[]=).with(:current, nil)
 
       @foo.uninstall!
     end
 
-    it 'should not remove binary symlink file if not current' do
-      expect(FileUtils).not_to receive(:rm).with(Evm::EVM_EMACS_PATH)
-
+    it 'should not remove shims or unset current if not current' do
       allow(@foo).to receive(:current?).and_return(false)
+      allow(config).to receive(:[]).with(:path).and_return(@foo.path)
+      allow(Evm).to receive(:config).and_return(config)
+
+      expect(file_class).not_to receive(:delete).with(Evm::EVM_EMACS_PATH)
+      expect(file_class).not_to receive(:delete).with(Evm::EMACS_PATH)
+      expect(config).not_to receive(:[]=)
 
       @foo.uninstall!
     end
