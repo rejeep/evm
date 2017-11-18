@@ -58,10 +58,6 @@ module Evm
         Dir.mkdir(path)
       end
 
-      unless File.exist?(tmp_path)
-        Dir.mkdir(tmp_path)
-      end
-
       Evm::Builder.new(recipe).build!
     end
 
@@ -85,10 +81,6 @@ module Evm
 
     def path
       File.join(Evm.config[:path], @name)
-    end
-
-    def tmp_path
-      File.join(Evm.config[:path], 'tmp')
     end
 
     class << self
