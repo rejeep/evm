@@ -217,49 +217,26 @@ modifications for the new version.  Also add the new version to the
 If you want to contribute a Travis binary, these instructions will help.
 
 1. Install [Docker](https://www.docker.com/)
-1. Follow
-   [Travis instructions](https://docs.travis-ci.com/user/common-build-problems/#Running-a-Container-Based-Docker-Image-Locally)
-   on running a Travis image locally
-1. In the docker container, install necessary tools
 
-    ```bash
-    docker$ sudo apt-get install build-essential libncurses-dev autoconf automake autogen git texinfo libtool
-    ```
-1. Download Emacs source
+2. Run the generate script:
 
-    ```bash
-    docker$ export VERSION=25.3 # choose your version
-    docker$ wget http://ftpmirror.gnu.org/emacs/emacs-$VERSION.tar.gz
-    ```
-1. Unzip it
+```bash
+$ docker/generate.sh -v 26.0.91
+# (be prepared to wait...)
+$ ls emacs-26.0.91-travis.tar.gz
+emacs-26.0.91-travis.tar.gz
+```
 
-    ```bash
-    docker$ tar -xvzf emacs-$VERSION.tar.gz
-    ```
-1. Compile and Install Emacs (follow
-   [these instructions](http://stackoverflow.com/questions/37544423/how-to-build-emacs-from-source-in-docker-hub-gap-between-bss-and-heap#37561793)
-   if you have a `"gap between BSS and heap error"`)
+Caution: Be prepared to wait!
 
-    ```bash
-    docker$ cd emacs-$VERSION
-    docker$ ./autogen.sh # for snapshot
-    docker$ ./configure --with-x-toolkit=no --without-x --without-all --with-gnutls --prefix=/tmp/emacs-$VERSION-travis
-    docker$ make bootstrap
-    docker$ make install
-    ```
-1. Tar it
+If you are running this script for the first time, it will need to
+create the build image, which means downloading a large (> 10 GB) base
+image from Travis CI, and further configuring it with the tools needed
+to compile Emacs from source.
 
-    ```bash
-    docker$ tar -C /tmp --remove-files -cvzf ~/emacs-$VERSION-travis.tar.gz emacs-$VERSION-travis
-    ```
+In addition, the Emacs build takes time and generates a fair amount of
+console output.
 
-1. Copy the tarball from the docker container to the host
+3. Create a new recipe and make a pull request.
 
-    ```bash
-    docker$ exit
-    $ docker cp <containerId>:/home/travis/emacs-$VERSION-travis.tar.gz .
-    ```
-
-1. Create a new recipe and make a pull request.
-
-1. Ask maintainer to add a new release and add the binary.
+4. Ask maintainer to add a new release and add the binary.
