@@ -140,10 +140,8 @@ describe Evm::Package do
   describe '#install!' do
     before do
       @builder = double('builder')
-      expect(@builder).to receive(:build!)
 
-      allow(File).to receive(:exist?).with('/tmp/evm/foo').and_return(true)
-
+      allow(file_class).to receive(:directory?).with('/tmp/evm/foo').and_return(true)
       allow(Evm::Builder).to receive(:new).and_return(@builder)
     end
 
@@ -151,6 +149,7 @@ describe Evm::Package do
       allow(file_class).to receive(:directory?).with('/tmp/evm/foo').and_return(false)
 
       expect(Dir).to receive(:mkdir).with('/tmp/evm/foo')
+      expect(@builder).to receive(:build!)
 
       @foo.install!
     end
@@ -159,8 +158,28 @@ describe Evm::Package do
       allow(file_class).to receive(:directory?).with('/tmp/evm/foo').and_return(true)
 
       expect(Dir).not_to receive(:mkdir)
+      expect(@builder).to receive(:build!)
 
       @foo.install!
+    end
+
+    it 'should clean up if directory creation fails' do
+      allow(file_class).to receive(:directory?).with('/tmp/evm/foo').and_return(false)
+
+      expect(FileUtils).to receive(:mkdir_p).with('/tmp/evm/foo').and_raise(Errno::EACCES)
+      expect(@builder).not_to receive(:build!)
+      expect(@foo).to receive(:uninstall!)
+
+      expect{@foo.install!}.to raise_exception(Errno::EACCES)
+    end
+
+    it 'should clean up if installation fails' do
+      allow(file_class).to receive(:directory?).with('/tmp/evm/foo').and_return(true)
+
+      expect(@builder).to receive(:build!).and_raise('build failure')
+      expect(@foo).to receive(:uninstall!)
+
+      expect{@foo.install!}.to raise_exception('build failure')
     end
   end
 
@@ -170,24 +189,26 @@ describe Evm::Package do
     end
 
     it 'should remove installation path if exists' do
-      allow(File).to receive(:exist?).and_return(true)
+      allow(file_class).to receive(:directory?).and_return(true)
       expect(FileUtils).to receive(:rm_r).with('/tmp/evm/foo')
 
       @foo.uninstall!
     end
 
     it 'should not remove installation path if not exists' do
-      allow(File).to receive(:exist?).and_return(false)
+      allow(file_class).to receive(:directory?).and_return(false)
       expect(FileUtils).not_to receive(:rm_r)
 
       @foo.uninstall!
     end
 
     it 'should remove shims and unset current if current' do
+      allow(file_class).to receive(:directory?).and_return(true)
       allow(@foo).to receive(:current?).and_return(true)
-      allow(config).to receive(:[]).with(:path).and_return(@foo.path)
+      allow(config).to receive(:[]).with(:path).and_return('/tmp/evm')
       allow(Evm).to receive(:config).and_return(config)
 
+      expect(FileUtils).to receive(:rm_r).with('/tmp/evm/foo')
       expect(file_class).to receive(:exists?).with(Evm::EMACS_PATH).and_return(true)
       expect(file_class).to receive(:exists?).with(Evm::EVM_EMACS_PATH).and_return(true)
       expect(file_class).to receive(:delete).with(Evm::EVM_EMACS_PATH)
@@ -198,8 +219,8 @@ describe Evm::Package do
     end
 
     it 'should not remove shims or unset current if not current' do
-      allow(@foo).to receive(:current?).and_return(false)
-      allow(config).to receive(:[]).with(:path).and_return(@foo.path)
+      allow(file_class).to receive(:directory?).and_return(false)
+      allow(config).to receive(:[]).with(:path).and_return('/tmp/evm')
       allow(Evm).to receive(:config).and_return(config)
 
       expect(file_class).not_to receive(:delete).with(Evm::EVM_EMACS_PATH)

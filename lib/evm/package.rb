@@ -54,15 +54,19 @@ module Evm
     end
 
     def install!
-      unless installed?
-        FileUtils.mkdir_p(path)
+      begin
+        unless installed?
+          FileUtils.mkdir_p(path)
+        end
+        Evm::Builder.new(recipe).build!
+      rescue ::Exception
+        uninstall!
+        raise
       end
-
-      Evm::Builder.new(recipe).build!
     end
 
     def uninstall!
-      if File.exist?(path)
+      if installed?
         FileUtils.rm_r(path)
       end
 
