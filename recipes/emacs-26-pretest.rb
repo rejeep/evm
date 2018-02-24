@@ -2,12 +2,14 @@ recipe 'emacs-26-pretest' do
   git 'http://git.savannah.gnu.org/r/emacs.git', 'emacs-26.0.90'
 
   osx do
+    option '--with-modules'
     option '--with-ns'
     option '--without-x'
     option '--without-dbus'
   end
 
   linux do
+    option '--with-modules'
     option '--prefix', installation_path
     option '--without-gif'
   end

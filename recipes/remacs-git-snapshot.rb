@@ -3,6 +3,7 @@ recipe 'remacs-git-snapshot' do
 
   osx do
     option '--with-ns'
+    option '--with-modules'
     option '--without-x'
     option '--without-dbus'
   end
