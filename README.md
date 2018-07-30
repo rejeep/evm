@@ -104,7 +104,7 @@ $ export PATH="$HOME/.evm/bin:$PATH"
 In the Evm `bin` directory, there are a few commands:
 
 * `evm` - Manage Emacs packages
-* `emacs/evm-emacs` - Emacs shim with currently selected Emacs package
+* `emacs`/`evm-emacs` - Emacs shim with currently selected Emacs package
 
 ### list
 
