@@ -44,6 +44,7 @@ describe Evm::Builder do
 
       it 'should pull if exist' do
         allow(@git_repo).to receive(:exist?).and_return(true)
+        expect(@git_repo).to receive(:reset)
         expect(@git_repo).to receive(:pull)
 
         @dsl.recipe 'name' do
