@@ -11,22 +11,26 @@ module Evm
     def clone(url, branch = nil, commit = nil)
       args = 'clone', url, @path
       args << "--branch=#{branch}" if branch
-      args << ' --depth=1' if not commit
+     if commit == nil
+        args << '--depth=1'
+      end
       git(*args)
     end
 
     def pull(commit = nil)
       Dir.chdir(@path) do
         args = 'pull'
-        args << ' --depth=1' if not commit
+        args = 'pull', '--unshallow' if commit
         git(*args)
       end
     end
 
     def reset(commit = nil)
-      args = 'reset', '--hard'
-      args << commit if commit
-      git(*args)
+      Dir.chdir(@path) do
+        args = 'reset', '--hard'
+        args << commit if commit
+        git(*args)
+      end
     end
 
     private

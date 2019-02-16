@@ -19,7 +19,7 @@ module Evm
        if git_repo.exist?
           git_repo.reset()
           git_repo.pull(commit)
-          git_repo.reset(commit) if commit
+          git_repo.reset(commit)
         else
           git_repo.clone(url, branch, commit)
           git_repo.reset(commit)
