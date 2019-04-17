@@ -8,8 +8,10 @@ module Evm
       File.exist?(@path)
     end
 
-    def clone(url)
-      git 'clone', url, @path
+    def clone(url, branch = nil)
+      args = 'clone', url, @path
+      args << "--branch=#{branch}" if branch
+      git(*args)
     end
 
     def pull
@@ -23,7 +25,7 @@ module Evm
 
     def git(*args)
       @git ||= Evm::System.new('git')
-      @git.run(*args)
+      @git.run(*args, '--depth=1')
     end
   end
 end

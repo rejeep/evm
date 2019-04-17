@@ -14,25 +14,21 @@ module Evm
         yield
       end
 
-      def git(url)
+      def git(url, branch = nil)
         git_repo = Evm::Git.new(build_path)
         if git_repo.exist?
           git_repo.pull
         else
-          git_repo.clone(url)
+          git_repo.clone(url, branch)
         end
       end
 
+      def tar_xz(url)
+        tar_packaged(url, 'xz')
+      end
+
       def tar_gz(url)
-        tar_file_path = File.join(builds_path, @name + '.tar.gz')
-
-        remote_file = Evm::RemoteFile.new(url)
-        remote_file.download(tar_file_path)
-
-        FileUtils.mkdir(build_path)
-
-        tar_file = Evm::TarFile.new(tar_file_path)
-        tar_file.extract(builds_path, @name)
+        tar_packaged(url, 'gz')
       end
 
       def osx(&block)
@@ -85,10 +81,22 @@ module Evm
       end
 
       def copy(from, to)
-        FileUtils.cp_r(from, to)
+        run_command "cp -a #{from} #{to}"
       end
 
       private
+
+      def tar_packaged(url, extension)
+        tar_file_path = File.join(builds_path, @name + '.tar.' + extension)
+
+        remote_file = Evm::RemoteFile.new(url)
+        remote_file.download(tar_file_path)
+
+        FileUtils.mkdir(build_path)
+
+        tar_file = Evm::TarFile.new(tar_file_path)
+        tar_file.extract(builds_path, @name)
+      end
 
       def run_command(command, *args)
         Dir.chdir(build_path) do

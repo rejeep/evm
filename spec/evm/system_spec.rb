@@ -7,25 +7,26 @@ describe Evm::System do
 
   describe '#run' do
     it 'should run when no arguments' do
-      Kernel.should_receive(:system).with('command').and_return(true)
+      expect(Kernel).to receive(:system).with('command').and_return(true)
 
       @system.run
     end
 
     it 'should run with single argument' do
-      Kernel.should_receive(:system).with('command', 'foo').and_return(true)
+      expect(Kernel).to receive(:system).with('command', 'foo').and_return(true)
 
       @system.run('foo')
     end
 
     it 'should run with multiple arguments' do
-      Kernel.should_receive(:system).with('command', 'foo', 'bar').and_return(true)
+      expect(Kernel).to receive(:system).with('command', 'foo', 'bar').and_return(true)
 
       @system.run('foo', 'bar')
     end
 
     it 'should exit if the command fails' do
-      Kernel.should_receive(:exit)
+      expect(STDERR).to receive(:puts).with('Failed! See logs above for error.')
+      expect(Kernel).to receive(:exit)
 
       # Based on http://stackoverflow.com/a/4589517
       system = Evm::System.new('(exit 21)')

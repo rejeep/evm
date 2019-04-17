@@ -9,12 +9,12 @@ describe Evm::TarFile do
 
   describe '#extract' do
     it 'extracts tar file to path when no name' do
-      subject.should_receive(:tar).with('-xzf', @tar_file, '-C', '/path/to')
+      expect(subject).to receive(:tar).with('-xf', @tar_file, '-C', '/path/to')
       subject.extract('/path/to')
     end
 
     it 'extracts tar file to path/name when name' do
-      subject.should_receive(:tar).with('-xzf', @tar_file, '-C', '/path/to/directory', '--strip-components', '1')
+      expect(subject).to receive(:tar).with('-xf', @tar_file, '-C', '/path/to/directory', '--strip-components', '1')
       subject.extract('/path/to', 'directory')
     end
   end

@@ -6,6 +6,7 @@ end
 require 'evm/command/install'
 require 'evm/command/uninstall'
 require 'evm/command/use'
+require 'evm/command/disuse'
 require 'evm/command/list'
 require 'evm/command/bin'
 require 'evm/command/config'

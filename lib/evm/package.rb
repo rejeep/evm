@@ -12,26 +12,45 @@ module Evm
     end
 
     def installed?
-      File.file?(bin) && File.executable?(bin)
+      @file.directory?(path)
     end
 
     def bin
-      if Evm::Os.osx? && File.exist?(File.join(path, 'Emacs.app'))
+      if Evm::Os.osx? && @file.exists?(File.join(path, 'Emacs.app'))
         File.join(path, 'Emacs.app', 'Contents', 'MacOS', 'Emacs')
       else
-        File.join(path, 'bin', 'emacs')
+        emacs_bin = File.join(path, 'bin', 'emacs')
+        if @file.exists?(emacs_bin)
+          emacs_bin
+        else
+          remacs_bin = File.join(path, 'bin', 'remacs')
+          if @file.exists?(remacs_bin)
+            remacs_bin
+          end
+        end
       end
     end
 
     def use!
+      delete_shims!
       [Evm::EMACS_PATH, Evm::EVM_EMACS_PATH].each do |bin_path|
-        @file.delete(bin_path) if @file.exists?(bin_path)
         @file.open(bin_path, 'w') do |file|
           file.puts("#!/bin/bash\nexec \"#{bin}\" \"$@\"")
         end
         @file.chmod(0755, bin_path)
       end
       Evm.config[:current] = name
+    end
+
+    def disuse!
+      delete_shims!
+      Evm.config[:current] = nil
+    end
+
+    def delete_shims!
+      [Evm::EMACS_PATH, Evm::EVM_EMACS_PATH].each do |bin_path|
+        @file.delete(bin_path) if @file.exists?(bin_path)
+      end
     end
 
     def install!
@@ -52,7 +71,7 @@ module Evm
       end
 
       if current?
-        FileUtils.rm(Evm::EVM_EMACS_PATH)
+        disuse!
       end
     end
 
@@ -95,5 +114,7 @@ module Evm
         end
       end
     end
+
+    private :delete_shims!
   end
 end

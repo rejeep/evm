@@ -1,5 +1,5 @@
-recipe 'emacs-24.3-travis' do
-  tar_gz 'https://github.com/rejeep/evm/releases/download/v0.6.1/emacs-24.3-travis.tar.gz'
+recipe 'emacs-25.1-travis' do
+  tar_gz 'https://github.com/rejeep/evm/releases/download/v0.9.0/emacs-25.1-travis.tar.gz'
 
   abort('config.path must be /tmp') unless Evm.config[:path] == '/tmp'
 
