@@ -1,56 +1,61 @@
 #!/bin/bash
 
-VERSION="26.0.91"
-IMAGE="evm-travis-builder:latest"
-KEEP_CONTAINER=0
+set -o errexit
+set -o nounset
 
-function usage {
-    printf "$0 [OPTIONS]\n\n"
-    printf "Build Emacs for execution in Travis CI.\n\n"
-    printf "Options:\n"
-    printf "  -h       Show help\n"
-    printf "  -k       Keep Docker container after build (default: false)\n"
-    printf "  -v VER   Build this emacs version (default: $VERSION)\n"
-    exit 0
+function usage() {
+    echo "$(basename "$0") [OPTIONS] VERSION"
+    echo
+    echo "Build Emacs for execution in Travis CI."
+    echo
+    echo "  VERSION     Emacs version to build"
+    echo
+    echo "Options:"
+    echo "  -h          Show help"
+    echo "  -k          Keep Docker container after successful build (default: false)"
 }
 
-while getopts "hkv:" opt; do
-    case "$opt" in
-        h) usage
-           ;;
-        k) KEEP_CONTAINER=1
-           ;;
-        v) VERSION=$OPTARG
-           ;;
-    esac
-done
-CONTAINER="build-emacs-$VERSION-travis"
+function parse_args() {
+    KEEP_CONTAINER=false
+    local option
+    while getopts "hk" option; do
+        case ${option} in
+            h) usage
+               exit 0
+               ;;
+            k) KEEP_CONTAINER=true
+               ;;
+            *) usage
+               exit 1
+               ;;
+        esac
+    done
+    shift $((OPTIND - 1))
 
-### Docker commands need to run in project's root directory
+    VERSION=${1:-} && shift
+    if [ -z "${VERSION}" ]; then
+        echo "VERSION is required!"
+        usage
+        exit 2
+    fi
+}
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $DIR/..
+# see http://stackoverflow.com/questions/37544423/how-to-build-emacs-from-source-in-docker-hub-gap-between-bss-and-heap#37561793
+function build_release() {
+    cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" || exit 3
 
-### Create the build image. If the image already exists and the
-### contents are current then this command does nothing.
-docker build -t $IMAGE .
+    local image="evm-travis-builder:latest"
+    local container="build-emacs-${VERSION}-travis"
 
-### Run the image to generate an Emacs build.
+    docker build -t ${image} .
+    docker run \
+           --name "${container}" \
+           --env VERSION="${VERSION}" \
+           --security-opt seccomp=unconfined \
+           ${image}
+    docker cp "${container}:/tmp/emacs-${VERSION}-travis.tar.gz" .
+    ${KEEP_CONTAINER} || docker rm "${container}"
+}
 
-# Note: we run the container with reduced security to resolve a build
-# requirement in Emacs ("gap between BSS and heap error").
-# See: http://stackoverflow.com/questions/37544423/how-to-build-emacs-from-source-in-docker-hub-gap-between-bss-and-heap#37561793
-
-docker run \
-       --name $CONTAINER \
-       --env VERSION=$VERSION \
-       --security-opt seccomp=unconfined \
-       $IMAGE
-
-### Extract the Emacs artifact from the container
-docker cp ${CONTAINER}:/home/travis/emacs-$VERSION-travis.tar.gz .
-
-### Remove the container
-if [ "$KEEP_CONTAINER" = "0" ]; then
-    docker rm $CONTAINER
-fi
+parse_args "$@"
+build_release
