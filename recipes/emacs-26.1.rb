@@ -13,9 +13,7 @@ recipe 'emacs-26.1' do
   end
 
   install do
-    autogen
     configure
-    make 'bootstrap'
     make 'install'
 
     osx do
