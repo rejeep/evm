@@ -1,5 +1,17 @@
 require 'rubygems'
 require 'bundler/setup'
+require 'simplecov'
+require 'coveralls'
+
+SimpleCov.formatters = [
+  Coveralls::SimpleCov::Formatter,
+  SimpleCov::Formatter::HTMLFormatter,
+]
+
+SimpleCov.start do
+  add_filter 'spec'
+  track_files 'lib/**/*.rb'
+end
 
 require 'evm'
 

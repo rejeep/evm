@@ -2,3 +2,4 @@
 /bin/emacs
 /bin/evm-emacs
 /.config
+/coverage/

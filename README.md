@@ -1,5 +1,9 @@
 # Emacs Version Manager
 
+[![Gem Version](https://badge.fury.io/rb/evm.svg)](http://badge.fury.io/rb/evm)
+[![Build Status](https://travis-ci.org/rejeep/evm.svg)](https://travis-ci.org/rejeep/evm)
+[![Coverage Status](https://coveralls.io/repos/rejeep/evm/badge.svg?branch=master&service=github)](https://coveralls.io/github/rejeep/evm?branch=master)
+
 ## Deprecation Warning!
 
 As Travis is moving towards a container-based infrastructure, hence
