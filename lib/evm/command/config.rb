@@ -2,17 +2,24 @@ module Evm
   module Command
     class Config
       def initialize(argv, options = {})
-        type, value = argv
+        key, value = argv
 
-        unless Evm::CONFIG_TYPES.include?(type.to_sym)
-          raise Evm::Exception, "Invalid config type: #{type}"
+        unless key
+          Evm.config.all.each do |k, v|
+            STDOUT.puts("#{k} => #{v}")
+          end
+          return
+        end
+
+        unless Evm::CONFIG_KEYS.include?(key.to_sym)
+          raise Evm::Exception, "Invalid config key: #{key}"
         end
 
         if value
-          Evm.config[type] = value
+          Evm.config[key] = value
         end
 
-        STDOUT.puts(Evm.config[type])
+        STDOUT.puts(Evm.config[key])
       end
     end
   end

@@ -8,7 +8,7 @@ module Evm
   EMACS_PATH = File.join(ROOT_PATH, 'bin', 'emacs')
   EVM_EMACS_PATH = File.join(ROOT_PATH, 'bin', 'evm-emacs')
   CONFIG_FILE = File.join(ROOT_PATH, '.config')
-  CONFIG_TYPES = [:path]
+  CONFIG_KEYS = [:path]
 
   def self.config
     Evm::Config.new(CONFIG_FILE, path: LOCAL_PATH)
