@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Evm::Command::List do
-  it 'should print list of packages' do
+  it 'should print sorted list of packages' do
     allow(Evm::Package).to receive(:all) do
       foo = double('foo')
       allow(foo).to receive(:current?).and_return(true)
@@ -31,6 +31,6 @@ describe Evm::Command::List do
 
     Evm::Command::List.new()
 
-    expect(output.join).to eq("* foo [I]\nbar\nbaz [I]\n")
+    expect(output.join).to eq("bar\nbaz [I]\n* foo [I]\n")
   end
 end

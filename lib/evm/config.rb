@@ -7,17 +7,20 @@ module Evm
       @defaults = defaults
     end
 
-    def [](type)
-      config[type.to_s] || begin
-        default = @defaults.find { |key, value| key.to_s == type.to_s }
-        default[1] if default
+    def [](key)
+      config[key.to_s] || begin
+        _, found_value = @defaults.find { |k, v| k.to_s == key.to_s }
+        found_value
       end
     end
 
-    def []=(type, value)
-      write(config.merge(type.to_s => value))
+    def []=(key, value)
+      write(config.merge(key.to_s => value))
     end
 
+    def all
+      Hash[@defaults.collect{|k, v| [k.to_s, v]}].merge(config)
+    end
 
     private
 

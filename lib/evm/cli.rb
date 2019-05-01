@@ -18,7 +18,7 @@ module Evm
         opts.separator  '        list                         List all available packages'
         opts.separator  '        use <name>                   Select name as current package'
         opts.separator  '        disuse                       Stop using the current package (remove binary from path but leave installed)'
-        opts.separator  '        config <var> <value>         Set the value of a configuration variable (like path)'
+        opts.separator  '        config [<var> [<value>]]     Get/set the value of configuration variable(s) (like path)'
         opts.separator  '        help                         Display this help message'
         opts.separator  ''
         opts.separator  'Options:'
