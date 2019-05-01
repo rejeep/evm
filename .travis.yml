@@ -24,8 +24,6 @@ script:
                           (= emacs-major-version 27)))
                  (kill-emacs 1))'
 rvm:
-  - 1.9.3
-  - 2.2.0
   - 2.3.8
   - 2.4.6
   - 2.5.5
