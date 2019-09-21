@@ -1,3 +1,5 @@
+os: linux
+dist: trusty
 language: ruby
 before_install:
   - sudo mkdir /usr/local/evm
