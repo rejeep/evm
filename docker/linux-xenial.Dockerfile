@@ -1,4 +1,4 @@
-FROM travisci/ci-garnet:packer-1515445631-7dfb2e1
+FROM travisci/ci-sardonyx:packer-1564753982-0c06deb6
 
 # hadolint ignore=DL3008
 RUN apt-get update -y \
@@ -8,6 +8,7 @@ RUN apt-get update -y \
         automake \
         build-essential \
         git \
+        libgnutls-dev \
         libncurses-dev \
         libtool \
         texinfo \
@@ -16,5 +17,5 @@ RUN apt-get update -y \
 
 USER travis
 WORKDIR /home/travis
-COPY docker/build-emacs.sh /home/travis/
+COPY build-emacs.sh /home/travis/
 CMD ["./build-emacs.sh"]

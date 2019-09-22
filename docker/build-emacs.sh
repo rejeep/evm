@@ -18,10 +18,10 @@ function build_emacs() {
                     --without-x \
                     --without-all \
                     --with-gnutls \
-                    --prefix="/tmp/emacs-${VERSION}-travis" && \
+                    --prefix="/tmp/${RELEASE}" && \
         make bootstrap && \
         make install && \
-        tar -C /tmp -czf "/tmp/emacs-${VERSION}-travis.tar.gz" "emacs-${VERSION}-travis"
+        tar -C /tmp -czf "/tmp/${RELEASE}.tar.gz" "${RELEASE}"
 }
 
 build_emacs
