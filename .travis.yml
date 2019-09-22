@@ -89,9 +89,3 @@ script:
                      (and (string= (getenv "EVM_EMACS") "emacs-git-snapshot-travis")
                           (= emacs-major-version 27)))
                  (kill-emacs 1))'
-rvm:
-  - 2.3.8
-  - 2.4.6
-  - 2.5.5
-  - 2.6.3
-  - ruby-head
