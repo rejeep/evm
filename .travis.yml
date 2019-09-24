@@ -36,7 +36,7 @@ matrix:
       env: EVM_EMACS=emacs-26.3-travis
     - os: linux
       dist: trusty
-      env: EVM_EMACS=emacs-git-snapshot-travis
+      env: EVM_EMACS=emacs-git-snapshot-travis-linux-trusty
     - os: linux
       dist: xenial
       env: EVM_EMACS=emacs-24.1-travis
@@ -70,6 +70,9 @@ matrix:
     - os: linux
       dist: xenial
       env: EVM_EMACS=emacs-26.3-travis-linux-xenial
+    - os: linux
+      dist: xenial
+      env: EVM_EMACS=emacs-git-snapshot-travis-linux-xenial
 before_install:
   - sudo mkdir /usr/local/evm
   - sudo chown travis:travis /usr/local/evm
@@ -86,6 +89,6 @@ script:
                                               emacs-major-version
                                               emacs-minor-version)
                                       (getenv "EVM_EMACS"))
-                     (and (string= (getenv "EVM_EMACS") "emacs-git-snapshot-travis")
+                     (and (string-prefix-p "emacs-git-snapshot-travis" (getenv "EVM_EMACS"))
                           (= emacs-major-version 27)))
                  (kill-emacs 1))'
