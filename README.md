@@ -31,14 +31,14 @@ information on how to use EVM on Travis.
   your platform and with your Emacs version. But what about all other
   versions that people are using? Does your package work for them?
 
-* EVM provides pre compiled binaries to allow for quick installation
+* EVM provides Linux pre-compiled binaries to allow for quick installation
   on CI systems.
 
 ## Platform Support
 
 ### OSX
 
-Supported!
+Supported! (currently no pre-compiled binaries for CI)
 
 ### GNU/Linux
 
