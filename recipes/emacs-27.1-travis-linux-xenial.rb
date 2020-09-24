@@ -1,5 +1,5 @@
 recipe 'emacs-27.1-travis-linux-xenial' do
-  tar_gz 'https://www.dropbox.com/s/57k8ijryc3lw7vv/emacs-27.1-travis-linux-xenial.tar.gz?dl=1'
+  tar_gz 'https://github.com/rejeep/evm/releases/download/v0.21.0/emacs-27.1-travis-linux-xenial.tar.gz'
 
   install do
     copy build_path, installations_path
