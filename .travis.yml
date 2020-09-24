@@ -96,5 +96,5 @@ script:
                                               emacs-minor-version)
                                       (getenv "EVM_EMACS"))
                      (and (string-prefix-p "emacs-git-snapshot-travis" (getenv "EVM_EMACS"))
-                          (= emacs-major-version 27)))
+                          (= emacs-major-version 28)))
                  (kill-emacs 1))'
