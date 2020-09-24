@@ -225,9 +225,9 @@ If you want to contribute a Travis binary, these instructions will help.
 2. Run the generate script:
 
 ```bash
-$ docker/build-release.sh 26.0.91
-$ ls emacs-26.0.91-travis.tar.gz
-emacs-26.0.91-travis.tar.gz
+$ docker/build-release.sh 27.1 linux-xenial
+$ ls emacs-27.1-travis-linux-xenial.tar.gz
+emacs-27.1-travis-linux-xenial.tar.gz
 ```
 
 Caution: Be prepared to wait!
