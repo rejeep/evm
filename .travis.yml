@@ -81,6 +81,9 @@ matrix:
       env: EVM_EMACS=emacs-27.2-travis-linux-xenial
     - os: linux
       dist: xenial
+      env: EVM_EMACS=emacs-28.1-travis-linux-xenial
+    - os: linux
+      dist: xenial
       env: EVM_EMACS=emacs-git-snapshot-travis-linux-xenial
 before_install:
   - sudo mkdir /usr/local/evm
