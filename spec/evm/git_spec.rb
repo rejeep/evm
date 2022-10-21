@@ -23,14 +23,14 @@ describe Evm::Git do
 
   describe 'clone' do
     it 'should clone url to path' do
-      expect(@git).to receive(:git).with('clone', 'URL', @path)
+      expect(@git).to receive(:git).with('clone', 'URL', @path, '--depth=1')
       @git.clone('URL')
     end
   end
 
   describe 'clone branch' do
     it 'should clone url with branch specification to path' do
-      expect(@git).to receive(:git).with('clone', 'URL', @path, '--branch=branch')
+      expect(@git).to receive(:git).with('clone', 'URL', @path, '--branch=branch', '--depth=1')
       @git.clone('URL', 'branch')
     end
   end
